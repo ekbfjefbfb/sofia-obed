@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR — Encuentra tu Mesa | Obed & Sofia</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Italiana&family=Montserrat:wght@200;300;400;500&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --gold: #C6A664;
+            --gold-soft: #D4BC8B;
+            --gold-pale: #F0E6CC;
+            --gold-dark: #9A7B3C;
+            --cream: #FDF9F5;
+            --blush: #FAF3EE;
+            --text: #1A1714;
+            --text-muted: #8A837C;
+        }
+
+        body {
+            font-family: 'Cormorant Garamond', serif;
+            background: var(--cream);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+        }
+
+        /* ========================================
+           QR CARD
+        ======================================== */
+        .qr-card {
+            max-width: 400px;
+            width: 100%;
+            text-align: center;
+            background: white;
+            border: 1px solid rgba(198, 166, 100, 0.12);
+            box-shadow: 0 25px 80px rgba(26, 23, 20, 0.06);
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Top gold accent bar */
+        .qr-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--gold), transparent);
+        }
+
+        /* Inner padding */
+        .qr-card-inner {
+            padding: 3rem 2.5rem 2.5rem;
+        }
+
+        /* ========================================
+           ORNAMENTS
+        ======================================== */
+        .qr-ornament-top {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.8rem;
+            margin-bottom: 1.8rem;
+        }
+
+        .qr-ornament-top .line {
+            width: 25px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--gold-soft));
+        }
+
+        .qr-ornament-top .line:last-child {
+            background: linear-gradient(90deg, var(--gold-soft), transparent);
+        }
+
+        .qr-ornament-top .diamond {
+            width: 5px;
+            height: 5px;
+            background: var(--gold);
+            transform: rotate(45deg);
+        }
+
+        /* ========================================
+           HEADER
+        ======================================== */
+        .qr-header-label {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.5rem;
+            font-weight: 300;
+            letter-spacing: 0.45em;
+            text-transform: uppercase;
+            color: var(--gold);
+            margin-bottom: 1rem;
+        }
+
+        .qr-header-names {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.7rem;
+            font-weight: 400;
+            color: var(--text);
+            line-height: 1.2;
+            margin-bottom: 0.15rem;
+        }
+
+        .qr-header-amp {
+            font-family: 'Italiana', serif;
+            font-size: 1.1rem;
+            color: var(--gold);
+            margin-bottom: 0.15rem;
+        }
+
+        .qr-header-date {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.5rem;
+            font-weight: 300;
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+        }
+
+        /* ========================================
+           QR CODE AREA
+        ======================================== */
+        .qr-code-wrap {
+            display: inline-block;
+            position: relative;
+            margin-bottom: 2rem;
+        }
+
+        .qr-code-frame {
+            padding: 1rem;
+            border: 1px solid rgba(198, 166, 100, 0.2);
+            position: relative;
+            background: white;
+        }
+
+        .qr-code-frame::before {
+            content: '';
+            position: absolute;
+            inset: -7px;
+            border: 1px solid rgba(198, 166, 100, 0.1);
+            pointer-events: none;
+        }
+
+        .qr-code-frame::after {
+            content: '';
+            position: absolute;
+            inset: -14px;
+            border: 1px solid rgba(198, 166, 100, 0.05);
+            pointer-events: none;
+        }
+
+        .qr-code-frame img,
+        .qr-code-frame canvas {
+            display: block;
+            width: 180px;
+            height: 180px;
+        }
+
+        /* Corner decorations */
+        .qr-corner {
+            position: absolute;
+            width: 16px;
+            height: 16px;
+        }
+
+        .qr-corner::before,
+        .qr-corner::after {
+            content: '';
+            position: absolute;
+            background: var(--gold);
+        }
+
+        .qr-corner::before {
+            width: 100%;
+            height: 1px;
+        }
+
+        .qr-corner::after {
+            width: 1px;
+            height: 100%;
+        }
+
+        .qr-corner.tl { top: -4px; left: -4px; }
+        .qr-corner.tl::before { top: 0; left: 0; }
+        .qr-corner.tl::after { top: 0; left: 0; }
+
+        .qr-corner.tr { top: -4px; right: -4px; }
+        .qr-corner.tr::before { top: 0; right: 0; }
+        .qr-corner.tr::after { top: 0; right: 0; }
+
+        .qr-corner.bl { bottom: -4px; left: -4px; }
+        .qr-corner.bl::before { bottom: 0; left: 0; }
+        .qr-corner.bl::after { bottom: 0; left: 0; }
+
+        .qr-corner.br { bottom: -4px; right: -4px; }
+        .qr-corner.br::before { bottom: 0; right: 0; }
+        .qr-corner.br::after { bottom: 0; right: 0; }
+
+        /* ========================================
+           TEXT BELOW QR
+        ======================================== */
+        .qr-instruction-label {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.5rem;
+            font-weight: 400;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            color: var(--gold);
+            margin-bottom: 0.6rem;
+        }
+
+        .qr-instruction-text {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.1rem;
+            font-style: italic;
+            color: var(--text-muted);
+            line-height: 1.5;
+            max-width: 250px;
+            margin: 0 auto;
+        }
+
+        /* ========================================
+           FOOTER
+        ======================================== */
+        .qr-card-footer {
+            padding: 1.2rem 2.5rem;
+            border-top: 1px solid rgba(198, 166, 100, 0.08);
+            background: rgba(253, 249, 245, 0.5);
+        }
+
+        .qr-card-url {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.45rem;
+            font-weight: 300;
+            letter-spacing: 0.15em;
+            color: var(--text-muted);
+            word-break: break-all;
+        }
+
+        /* ========================================
+           BOTTOM ORNAMENT
+        ======================================== */
+        .qr-ornament-bottom {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.6rem;
+            margin-top: 2rem;
+        }
+
+        .qr-ornament-bottom .line {
+            width: 15px;
+            height: 1px;
+            background: var(--gold-pale);
+        }
+
+        .qr-ornament-bottom .dot {
+            width: 3px;
+            height: 3px;
+            background: var(--gold-soft);
+            border-radius: 50%;
+        }
+
+        /* ========================================
+           PRINT STYLES
+        ======================================== */
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+                min-height: auto;
+            }
+
+            .qr-card {
+                box-shadow: none;
+                border: 1px solid #e0d8cc;
+                max-width: 100%;
+                page-break-inside: avoid;
+            }
+        }
+
+        @page {
+            size: A5 portrait;
+            margin: 10mm;
+        }
+
+        /* ========================================
+           RESPONSIVE
+        ======================================== */
+        @media (max-width: 440px) {
+            .qr-card-inner {
+                padding: 2.5rem 2rem 2rem;
+            }
+
+            .qr-header-names {
+                font-size: 1.5rem;
+            }
+        }
+
+        /* ========================================
+           ANIMATION
+        ======================================== */
+        .qr-card {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: cardReveal 1s cubic-bezier(0.23, 1, 0.32, 1) 0.2s forwards;
+        }
+
+        @keyframes cardReveal {
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="qr-card">
+        <div class="qr-card-inner">
+
+            <!-- Ornament -->
+            <div class="qr-ornament-top">
+                <span class="line"></span>
+                <span class="diamond"></span>
+                <span class="line"></span>
+            </div>
+
+            <!-- Header -->
+            <p class="qr-header-label">Nuestra Boda</p>
+            <p class="qr-header-amp">&</p>
+            <h1 class="qr-header-names">Obed & Sofia Rendoza</h1>
+            <p class="qr-header-date">15 · Septiembre · 2026</p>
+
+            <!-- QR Code -->
+            <div class="qr-code-wrap">
+                <div class="qr-code-frame">
+                    <span class="qr-corner tl"></span>
+                    <span class="qr-corner tr"></span>
+                    <span class="qr-corner bl"></span>
+                    <span class="qr-corner br"></span>
+                    <canvas id="qrCanvas"></canvas>
+                </div>
+            </div>
+
+            <!-- Instructions -->
+            <p class="qr-instruction-label">Escanea el código</p>
+            <p class="qr-instruction-text">
+                Apunta tu cámara al código QR y descubre en qué mesa estás
+            </p>
+
+            <!-- Ornament bottom -->
+            <div class="qr-ornament-bottom">
+                <span class="line"></span>
+                <span class="dot"></span>
+                <span class="line"></span>
+            </div>
+
+        </div>
+
+        <!-- Footer -->
+        <div class="qr-card-footer">
+            <p class="qr-card-url" id="cardUrl"></p>
+        </div>
+    </div>
+
+    <!-- QR Code Library -->
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+    <script>
+        const SITE_URL = window.location.origin;
+
+        document.getElementById('cardUrl').textContent = SITE_URL;
+
+        // Generate QR on canvas with gold styling
+        const canvas = document.getElementById('qrCanvas');
+        QRCode.toCanvas(canvas, SITE_URL, {
+            width: 180,
+            margin: 0,
+            color: {
+                dark: '#1A1714',
+                light: '#FFFFFF'
+            },
+            errorCorrectionLevel: 'H'
+        }, function (error) {
+            if (error) console.error(error);
+        });
+    </script>
+
+</body>
+</html>
