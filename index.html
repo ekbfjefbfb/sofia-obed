@@ -27,16 +27,16 @@
             --text-light: #B5AEA6;
             --white: #FFFFFF;
             --ease-luxury: cubic-bezier(0.23, 1, 0.32, 1);
+            --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        html { scroll-behavior: smooth; }
-
+        html, body { height: 100%; overflow: hidden; }
         body {
             font-family: 'Cormorant Garamond', serif;
             background: var(--cream);
             color: var(--text-primary);
-            overflow-x: hidden;
             -webkit-font-smoothing: antialiased;
+            overscroll-behavior: none;
         }
 
         /* PRELOADER */
@@ -65,7 +65,7 @@
 
         /* HERO */
         .hero {
-            min-height: 100vh; min-height: 100dvh;
+            height: 100vh; height: 100dvh;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
             text-align: center; padding: 2.5rem 1.5rem;
             position: relative; overflow: hidden;
@@ -129,28 +129,33 @@
         @keyframes fadeSlideUp { from { opacity: 0; transform: translateY(25px); } to { opacity: 1; transform: translateY(0); } }
 
         /* ============================================
-           PDF VIEWER - FULLSCREEN PAGES
+           PDF VIEWER - FULLSCREEN
         ============================================ */
         .pdf-viewer {
-            display: none;
             position: fixed; inset: 0;
             background: var(--cream);
             z-index: 9000;
-            flex-direction: column;
+            display: flex; flex-direction: column;
+            opacity: 0; visibility: hidden;
+            transform: scale(1.02);
+            transition: opacity 0.5s var(--ease-luxury), visibility 0.5s, transform 0.5s var(--ease-luxury);
         }
-        .pdf-viewer.active { display: flex; }
+        .pdf-viewer.active { opacity: 1; visibility: visible; transform: scale(1); }
 
         .pdf-viewer-header {
             flex-shrink: 0;
-            padding: 1rem 1rem 0.5rem;
+            padding: 0.8rem 1rem 0.6rem;
             display: flex; align-items: center; justify-content: space-between;
             background: var(--cream);
-            border-bottom: 1px solid rgba(198,166,100,0.1);
-            padding-top: calc(1rem + env(safe-area-inset-top, 0px));
+            border-bottom: 1px solid rgba(198,166,100,0.08);
+            padding-top: calc(0.8rem + env(safe-area-inset-top, 0px));
+            opacity: 0; transform: translateY(-10px);
+            transition: opacity 0.4s var(--ease-luxury) 0.2s, transform 0.4s var(--ease-luxury) 0.2s;
         }
+        .pdf-viewer.active .pdf-viewer-header { opacity: 1; transform: translateY(0); }
 
         .pdf-viewer-close {
-            width: 36px; height: 36px;
+            width: 34px; height: 34px;
             border: none; background: none;
             display: flex; align-items: center; justify-content: center;
             cursor: pointer; color: var(--text-muted);
@@ -158,11 +163,11 @@
             -webkit-tap-highlight-color: transparent;
         }
         .pdf-viewer-close:hover { color: var(--gold); }
-        .pdf-viewer-close svg { width: 20px; height: 20px; }
+        .pdf-viewer-close svg { width: 18px; height: 18px; }
 
         .pdf-viewer-title {
             font-family: 'Playfair Display', serif;
-            font-size: 1rem;
+            font-size: 0.95rem;
             font-weight: 400;
             color: var(--text-primary);
             text-align: center;
@@ -179,6 +184,7 @@
             text-align: right;
         }
 
+        /* VIEWER BODY */
         .pdf-viewer-body {
             flex: 1;
             display: flex;
@@ -189,41 +195,75 @@
             touch-action: none;
         }
 
-        .pdf-zoom-wrapper {
+        .pdf-page-stage {
+            position: relative;
+            width: 100%;
+            height: 100%;
             display: flex;
             align-items: center;
             justify-content: center;
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-            position: relative;
         }
 
-        .pdf-zoom-wrapper canvas {
+        .pdf-page-slot {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 12px;
+            opacity: 0;
+            transform: translateX(60px) scale(0.96);
+            transition: opacity 0.45s var(--ease-luxury), transform 0.45s var(--ease-luxury);
+            pointer-events: none;
+        }
+
+        .pdf-page-slot.active {
+            opacity: 1;
+            transform: translateX(0) scale(1);
+            pointer-events: auto;
+        }
+
+        .pdf-page-slot.exit-left {
+            opacity: 0;
+            transform: translateX(-60px) scale(0.96);
+        }
+
+        .pdf-page-slot.exit-right {
+            opacity: 0;
+            transform: translateX(60px) scale(0.96);
+        }
+
+        .pdf-page-slot.enter-left {
+            transform: translateX(-60px) scale(0.96);
+        }
+
+        .pdf-page-slot canvas {
             display: block;
             max-width: 100%;
             max-height: 100%;
-            object-fit: contain;
-            border-radius: 8px;
-            box-shadow: 0 10px 60px rgba(26,23,20,0.15);
-            transition: transform 0.15s ease;
-            transform-origin: center center;
+            border-radius: 10px;
+            box-shadow: 0 8px 50px rgba(26,23,20,0.12), 0 2px 12px rgba(26,23,20,0.06);
             touch-action: none;
+            transform-origin: center center;
         }
 
-        .pdf-viewer-body .page-loading {
+        .pdf-page-loading {
             position: absolute;
-            text-align: center;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            gap: 1rem;
+            opacity: 0;
+            transition: opacity 0.3s ease;
         }
-        .pdf-viewer-body .page-loading .spinner {
+        .pdf-page-loading.visible { opacity: 1; }
+        .pdf-page-loading .spinner {
             width: 36px; height: 36px;
             border: 2px solid var(--gold-pale);
             border-top-color: var(--gold);
             border-radius: 50%;
             animation: spin 1s linear infinite;
-            margin: 0 auto 1rem;
         }
-        .pdf-viewer-body .page-loading p {
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .pdf-page-loading p {
             font-family: 'Montserrat', sans-serif;
             font-size: 0.55rem;
             font-weight: 300;
@@ -231,79 +271,83 @@
             text-transform: uppercase;
             color: var(--text-muted);
         }
-        @keyframes spin { to { transform: rotate(360deg); } }
 
+        /* NAV BAR */
         .pdf-viewer-nav {
             flex-shrink: 0;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 0.6rem 1rem;
-            padding-bottom: calc(0.6rem + env(safe-area-inset-bottom, 0px));
+            padding: 0.5rem 0.75rem;
+            padding-bottom: calc(0.5rem + env(safe-area-inset-bottom, 0px));
             background: var(--cream);
-            border-top: 1px solid rgba(198,166,100,0.1);
+            border-top: 1px solid rgba(198,166,100,0.08);
+            opacity: 0; transform: translateY(10px);
+            transition: opacity 0.4s var(--ease-luxury) 0.3s, transform 0.4s var(--ease-luxury) 0.3s;
         }
+        .pdf-viewer.active .pdf-viewer-nav { opacity: 1; transform: translateY(0); }
 
-        .pdf-nav-group { display: flex; align-items: center; gap: 0.5rem; }
+        .pdf-nav-group { display: flex; align-items: center; gap: 0.4rem; }
 
         .pdf-nav-btn {
-            width: 40px; height: 40px;
+            width: 38px; height: 38px;
             border: 1px solid var(--gold-soft);
             background: transparent;
             border-radius: 50%;
             display: flex; align-items: center; justify-content: center;
             cursor: pointer;
             color: var(--gold);
-            transition: all 0.3s var(--ease-luxury);
+            transition: all 0.25s var(--ease-luxury);
             -webkit-tap-highlight-color: transparent;
         }
         .pdf-nav-btn:hover { background: var(--gold); color: var(--white); border-color: var(--gold); }
-        .pdf-nav-btn:active { transform: scale(0.92); }
-        .pdf-nav-btn.disabled { opacity: 0.3; pointer-events: none; }
-        .pdf-nav-btn svg { width: 16px; height: 16px; }
+        .pdf-nav-btn:active { transform: scale(0.9); }
+        .pdf-nav-btn.disabled { opacity: 0.25; pointer-events: none; }
+        .pdf-nav-btn svg { width: 15px; height: 15px; }
 
-        .pdf-zoom-label {
-            font-family: 'Montserrat', sans-serif;
-            font-size: 0.5rem;
-            font-weight: 300;
-            letter-spacing: 0.1em;
-            color: var(--text-muted);
-            min-width: 36px;
-            text-align: center;
-        }
-
-        .pdf-nav-dots {
-            display: flex;
-            gap: 6px;
-            align-items: center;
-        }
+        .pdf-nav-dots { display: flex; gap: 5px; align-items: center; }
         .pdf-nav-dot {
-            width: 6px; height: 6px;
+            width: 5px; height: 5px;
             border-radius: 50%;
             background: var(--gold-pale);
-            transition: all 0.3s var(--ease-luxury);
+            transition: all 0.35s var(--ease-luxury);
             cursor: pointer;
         }
         .pdf-nav-dot.active {
             background: var(--gold);
-            width: 18px;
+            width: 16px;
             border-radius: 3px;
+        }
+
+        .pdf-zoom-label {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.48rem;
+            font-weight: 300;
+            letter-spacing: 0.1em;
+            color: var(--text-muted);
+            min-width: 32px;
+            text-align: center;
         }
 
         .pdf-viewer-footer {
             flex-shrink: 0;
             text-align: center;
-            padding: 0.3rem 1rem 0.5rem;
+            padding: 0.25rem 1rem 0.4rem;
             font-family: 'Montserrat', sans-serif;
-            font-size: 0.45rem;
+            font-size: 0.42rem;
             font-weight: 300;
             letter-spacing: 0.15em;
             color: var(--text-light);
+            opacity: 0;
+            transition: opacity 0.4s var(--ease-luxury) 0.35s;
         }
+        .pdf-viewer.active .pdf-viewer-footer { opacity: 1; }
 
         /* FOOTER */
         .footer {
-            padding: 4rem 1.5rem 3rem; text-align: center;
+            height: 30vh;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            text-align: center;
             background: linear-gradient(180deg, var(--cream) 0%, var(--blush) 100%);
             position: relative;
         }
@@ -388,6 +432,16 @@
         </div>
     </section>
 
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="footer-mono">O & S</div>
+        <p class="footer-date">01 · 08 · 2026</p>
+        <p class="footer-message">Gracias por celebrar con nosotros</p>
+        <div class="footer-hearts">
+            <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        </div>
+    </footer>
+
     <!-- PDF VIEWER FULLSCREEN -->
     <div class="pdf-viewer" id="pdfViewer">
         <div class="pdf-viewer-header">
@@ -401,12 +455,11 @@
         </div>
 
         <div class="pdf-viewer-body" id="viewerBody">
-            <div class="pdf-zoom-wrapper" id="zoomWrapper">
-                <div class="page-loading" id="pageLoading">
-                    <div class="spinner"></div>
-                    <p>Cargando...</p>
-                </div>
+            <div class="pdf-page-loading visible" id="pageLoading">
+                <div class="spinner"></div>
+                <p>Cargando...</p>
             </div>
+            <div class="pdf-page-stage" id="pageStage"></div>
         </div>
 
         <div class="pdf-viewer-nav">
@@ -442,16 +495,6 @@
         <div class="pdf-viewer-footer">Obed Torres & Sofia Vasquez · 01 · 08 · 2026</div>
     </div>
 
-    <!-- FOOTER -->
-    <footer class="footer">
-        <div class="footer-mono">O & S</div>
-        <p class="footer-date">01 · 08 · 2026</p>
-        <p class="footer-message">Gracias por celebrar con nosotros</p>
-        <div class="footer-hearts">
-            <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-        </div>
-    </footer>
-
     <!-- PDF.js -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
     <script>
@@ -462,9 +505,7 @@
         let pdfDoc = null;
         let currentPage = 1;
         let totalPages = 1;
-        let renderedPages = {};
-        let isRendering = false;
-        let touchStartX = 0;
+        let isTransitioning = false;
         let zoomLevel = 1;
         const ZOOM_MIN = 0.5;
         const ZOOM_MAX = 4;
@@ -474,7 +515,9 @@
         let lastTapTime = 0;
         let panX = 0, panY = 0;
         let panStartX = 0, panStartY = 0;
+        let touchStartX = 0, touchStartY = 0;
         let isPanning = false;
+        let pageCache = {};
 
         // PRELOADER
         window.addEventListener('load', () => {
@@ -498,7 +541,8 @@
 
         // OPEN VIEWER
         async function openPdfViewer() {
-            document.getElementById('pdfViewer').classList.add('active');
+            const viewer = document.getElementById('pdfViewer');
+            viewer.classList.add('active');
             document.body.style.overflow = 'hidden';
 
             if (!pdfDoc) {
@@ -507,67 +551,65 @@
                     totalPages = pdfDoc.numPages;
                     currentPage = 1;
                     buildDots();
-                    renderCurrentPage();
+                    await renderPage(1, 'none');
+                    document.getElementById('pageLoading').classList.remove('visible');
                 } catch (err) {
                     document.getElementById('pageLoading').innerHTML =
                         '<p style="color:var(--text-muted);font-family:Cormorant Garamond,serif;font-style:italic;">No se pudo cargar la lista.</p>';
                 }
-            } else {
-                renderCurrentPage();
             }
+            updateNav();
         }
 
         // CLOSE VIEWER
         function closePdfViewer() {
-            document.getElementById('pdfViewer').classList.remove('active');
+            const viewer = document.getElementById('pdfViewer');
+            viewer.classList.remove('active');
             document.body.style.overflow = '';
+            resetZoom();
         }
 
-        // BUILD NAV DOTS
+        // BUILD DOTS
         function buildDots() {
             const dots = document.getElementById('navDots');
             dots.innerHTML = '';
             for (let i = 1; i <= totalPages; i++) {
                 const dot = document.createElement('div');
                 dot.className = 'pdf-nav-dot' + (i === 1 ? ' active' : '');
-                dot.setAttribute('data-page', i);
                 dot.addEventListener('click', () => goToPage(i));
                 dots.appendChild(dot);
             }
-            updateNav();
         }
 
-        // UPDATE NAV STATE
+        // UPDATE NAV
         function updateNav() {
             document.getElementById('pageIndicator').textContent = currentPage + ' / ' + totalPages;
             document.getElementById('btnPrev').classList.toggle('disabled', currentPage <= 1);
             document.getElementById('btnNext').classList.toggle('disabled', currentPage >= totalPages);
-
             document.querySelectorAll('.pdf-nav-dot').forEach((dot, idx) => {
                 dot.classList.toggle('active', idx + 1 === currentPage);
             });
         }
 
-        // RENDER PAGE
-        async function renderCurrentPage() {
-            if (isRendering || !pdfDoc) return;
-            isRendering = true;
+        // RENDER A SPECIFIC PAGE INTO A SLOT
+        async function renderPage(pageNum, direction) {
+            if (!pdfDoc) return;
+            const stage = document.getElementById('pageStage');
 
-            const wrapper = document.getElementById('zoomWrapper');
-            const loading = document.getElementById('pageLoading');
+            let slot = pageCache[pageNum];
+            if (!slot) {
+                slot = document.createElement('div');
+                slot.className = 'pdf-page-slot enter-' + (direction === 'next' ? 'right' : direction === 'prev' ? 'left' : '');
+                slot.setAttribute('data-page', pageNum);
+                stage.appendChild(slot);
+                pageCache[pageNum] = slot;
 
-            if (loading) loading.style.display = '';
-            wrapper.querySelectorAll('canvas').forEach(c => c.remove());
-
-            try {
-                const page = await pdfDoc.getPage(currentPage);
-                const baseViewport = page.getViewport({ scale: 1 });
-                const availW = wrapper.clientWidth - 16;
-                const availH = wrapper.clientHeight - 16;
-                const scaleW = availW / baseViewport.width;
-                const scaleH = availH / baseViewport.height;
+                const page = await pdfDoc.getPage(pageNum);
+                const baseVP = page.getViewport({ scale: 1 });
+                const availW = stage.clientWidth - 24;
+                const availH = stage.clientHeight - 24;
                 const dpr = Math.min(window.devicePixelRatio || 1, 3);
-                const scale = Math.min(scaleW, scaleH) * dpr;
+                const scale = Math.min(availW / baseVP.width, availH / baseVP.height) * dpr;
                 const viewport = page.getViewport({ scale: scale });
 
                 const canvas = document.createElement('canvas');
@@ -575,43 +617,59 @@
                 canvas.height = viewport.height;
                 canvas.style.maxWidth = '100%';
                 canvas.style.maxHeight = '100%';
+                canvas.setAttribute('data-page-canvas', pageNum);
 
-                if (loading) loading.style.display = 'none';
-                wrapper.appendChild(canvas);
+                slot.appendChild(canvas);
 
                 const ctx = canvas.getContext('2d');
                 ctx.imageSmoothingEnabled = true;
                 ctx.imageSmoothingQuality = 'high';
                 await page.render({ canvasContext: ctx, viewport: viewport }).promise;
-
-                renderedPages[currentPage] = true;
-            } catch (err) {
-                if (loading) {
-                    loading.innerHTML = '<p style="color:var(--text-muted);font-style:italic;">Error al renderizar</p>';
-                }
             }
 
-            isRendering = false;
+            return slot;
+        }
+
+        // TRANSITION TO PAGE
+        async function transitionToPage(newPage, direction) {
+            if (isTransitioning || newPage === currentPage || newPage < 1 || newPage > totalPages) return;
+            isTransitioning = true;
+            resetZoom();
+
+            const stage = document.getElementById('pageStage');
+            const oldSlot = pageCache[currentPage];
+            const newSlot = await renderPage(newPage, direction);
+
+            if (oldSlot) {
+                oldSlot.classList.remove('active');
+                oldSlot.classList.add(direction === 'next' ? 'exit-left' : 'exit-right');
+            }
+
+            newSlot.classList.remove('enter-left', 'enter-right');
+            newSlot.classList.add('active');
+
+            await new Promise(r => setTimeout(r, 460));
+
+            if (oldSlot) {
+                oldSlot.classList.remove('exit-left', 'exit-right');
+            }
+
+            currentPage = newPage;
+            isTransitioning = false;
             updateNav();
         }
 
-        // NAVIGATION
-        function goToPage(n) {
-            if (n < 1 || n > totalPages || n === currentPage) return;
-            currentPage = n;
-            resetZoom();
-            renderCurrentPage();
-        }
-
-        function nextPage() { goToPage(currentPage + 1); }
-        function prevPage() { goToPage(currentPage - 1); }
+        function goToPage(n) { transitionToPage(n, n > currentPage ? 'next' : 'prev'); }
+        function nextPage() { transitionToPage(currentPage + 1, 'next'); }
+        function prevPage() { transitionToPage(currentPage - 1, 'prev'); }
 
         // ZOOM
         function setZoom(level) {
             zoomLevel = Math.max(ZOOM_MIN, Math.min(ZOOM_MAX, level));
-            const canvas = document.querySelector('.pdf-zoom-wrapper canvas');
+            const canvas = document.querySelector('.pdf-page-slot.active canvas');
             if (canvas) {
                 canvas.style.transform = 'scale(' + zoomLevel + ') translate(' + (panX / zoomLevel) + 'px, ' + (panY / zoomLevel) + 'px)';
+                canvas.style.transition = 'transform 0.15s ease';
             }
             document.getElementById('zoomLabel').textContent = Math.round(zoomLevel * 100) + '%';
         }
@@ -623,8 +681,11 @@
             zoomLevel = 1;
             panX = 0;
             panY = 0;
-            const canvas = document.querySelector('.pdf-zoom-wrapper canvas');
-            if (canvas) canvas.style.transform = '';
+            const canvas = document.querySelector('.pdf-page-slot.active canvas');
+            if (canvas) {
+                canvas.style.transform = '';
+                canvas.style.transition = 'transform 0.3s var(--ease-luxury)';
+            }
             document.getElementById('zoomLabel').textContent = '100%';
         }
 
@@ -641,15 +702,11 @@
                 panStartY = panY;
                 isPanning = zoomLevel > 1;
 
-                // Double tap detection
                 const now = Date.now();
                 if (now - lastTapTime < 300) {
                     e.preventDefault();
-                    if (zoomLevel > 1) {
-                        resetZoom();
-                    } else {
-                        setZoom(2.5);
-                    }
+                    if (zoomLevel > 1) resetZoom();
+                    else setZoom(2.5);
                     lastTapTime = 0;
                     return;
                 }
@@ -676,30 +733,29 @@
                     touches[0].clientX - touches[1].clientX,
                     touches[0].clientY - touches[1].clientY
                 );
-                const scale = dist / pinchStartDist;
-                setZoom(pinchStartZoom * scale);
+                setZoom(pinchStartZoom * (dist / pinchStartDist));
                 return;
             }
 
             if (touches.length === 1 && isPanning && zoomLevel > 1) {
                 e.preventDefault();
-                const dx = touches[0].clientX - touchStartX;
-                const dy = touches[0].clientY - touchStartY;
-                panX = panStartX + dx;
-                panY = panStartY + dy;
-                const canvas = document.querySelector('.pdf-zoom-wrapper canvas');
-                if (canvas) canvas.style.transform = 'scale(' + zoomLevel + ') translate(' + (panX / zoomLevel) + 'px, ' + (panY / zoomLevel) + 'px)';
+                panX = panStartX + (touches[0].clientX - touchStartX);
+                panY = panStartY + (touches[0].clientY - touchStartY);
+                const canvas = document.querySelector('.pdf-page-slot.active canvas');
+                if (canvas) {
+                    canvas.style.transition = 'none';
+                    canvas.style.transform = 'scale(' + zoomLevel + ') translate(' + (panX / zoomLevel) + 'px, ' + (panY / zoomLevel) + 'px)';
+                }
             }
         }, { passive: false });
 
         viewerBody.addEventListener('touchend', (e) => {
             if (e.touches.length === 0) {
-                // Swipe detection (only when not zoomed)
                 if (zoomLevel <= 1) {
-                    const diff = touchStartX - e.changedTouches[0].clientX;
-                    const diffY = Math.abs(touchStartY - e.changedTouches[0].clientY);
-                    if (Math.abs(diff) > 50 && diffY < 80) {
-                        if (diff > 0) nextPage();
+                    const dx = touchStartX - e.changedTouches[0].clientX;
+                    const dy = Math.abs(touchStartY - e.changedTouches[0].clientY);
+                    if (Math.abs(dx) > 50 && dy < 80) {
+                        if (dx > 0) nextPage();
                         else prevPage();
                     }
                 }
@@ -708,7 +764,7 @@
             }
         }, { passive: true });
 
-        // KEYBOARD NAV
+        // KEYBOARD
         document.addEventListener('keydown', (e) => {
             if (!document.getElementById('pdfViewer').classList.contains('active')) return;
             if (e.key === 'ArrowRight' || e.key === 'ArrowDown') nextPage();
