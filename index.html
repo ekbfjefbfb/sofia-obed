@@ -186,17 +186,29 @@
             justify-content: center;
             overflow: hidden;
             position: relative;
-            touch-action: pan-y;
+            touch-action: none;
         }
 
-        .pdf-viewer-body canvas {
+        .pdf-zoom-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .pdf-zoom-wrapper canvas {
             display: block;
             max-width: 100%;
             max-height: 100%;
             object-fit: contain;
             border-radius: 8px;
             box-shadow: 0 10px 60px rgba(26,23,20,0.15);
-            transition: opacity 0.25s ease, transform 0.25s ease;
+            transition: transform 0.15s ease;
+            transform-origin: center center;
+            touch-action: none;
         }
 
         .pdf-viewer-body .page-loading {
@@ -225,16 +237,17 @@
             flex-shrink: 0;
             display: flex;
             align-items: center;
-            justify-content: center;
-            gap: 1rem;
-            padding: 0.75rem 1rem;
-            padding-bottom: calc(0.75rem + env(safe-area-inset-bottom, 0px));
+            justify-content: space-between;
+            padding: 0.6rem 1rem;
+            padding-bottom: calc(0.6rem + env(safe-area-inset-bottom, 0px));
             background: var(--cream);
             border-top: 1px solid rgba(198,166,100,0.1);
         }
 
+        .pdf-nav-group { display: flex; align-items: center; gap: 0.5rem; }
+
         .pdf-nav-btn {
-            width: 44px; height: 44px;
+            width: 40px; height: 40px;
             border: 1px solid var(--gold-soft);
             background: transparent;
             border-radius: 50%;
@@ -247,7 +260,17 @@
         .pdf-nav-btn:hover { background: var(--gold); color: var(--white); border-color: var(--gold); }
         .pdf-nav-btn:active { transform: scale(0.92); }
         .pdf-nav-btn.disabled { opacity: 0.3; pointer-events: none; }
-        .pdf-nav-btn svg { width: 18px; height: 18px; }
+        .pdf-nav-btn svg { width: 16px; height: 16px; }
+
+        .pdf-zoom-label {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.5rem;
+            font-weight: 300;
+            letter-spacing: 0.1em;
+            color: var(--text-muted);
+            min-width: 36px;
+            text-align: center;
+        }
 
         .pdf-nav-dots {
             display: flex;
@@ -378,24 +401,42 @@
         </div>
 
         <div class="pdf-viewer-body" id="viewerBody">
-            <div class="page-loading" id="pageLoading">
-                <div class="spinner"></div>
-                <p>Cargando...</p>
+            <div class="pdf-zoom-wrapper" id="zoomWrapper">
+                <div class="page-loading" id="pageLoading">
+                    <div class="spinner"></div>
+                    <p>Cargando...</p>
+                </div>
             </div>
         </div>
 
         <div class="pdf-viewer-nav">
-            <button class="pdf-nav-btn" id="btnPrev" onclick="prevPage()">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M15 18l-6-6 6-6"/>
-                </svg>
-            </button>
-            <div class="pdf-nav-dots" id="navDots"></div>
-            <button class="pdf-nav-btn" id="btnNext" onclick="nextPage()">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M9 18l6-6-6-6"/>
-                </svg>
-            </button>
+            <div class="pdf-nav-group">
+                <button class="pdf-nav-btn" id="btnPrev" onclick="prevPage()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M15 18l-6-6 6-6"/>
+                    </svg>
+                </button>
+                <div class="pdf-nav-dots" id="navDots"></div>
+                <button class="pdf-nav-btn" id="btnNext" onclick="nextPage()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M9 18l6-6-6-6"/>
+                    </svg>
+                </button>
+            </div>
+            <div class="pdf-nav-group">
+                <button class="pdf-nav-btn" onclick="zoomOut()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="5" y1="12" x2="19" y2="12"/>
+                    </svg>
+                </button>
+                <span class="pdf-zoom-label" id="zoomLabel">100%</span>
+                <button class="pdf-nav-btn" onclick="zoomIn()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="12" y1="5" x2="12" y2="19"/>
+                        <line x1="5" y1="12" x2="19" y2="12"/>
+                    </svg>
+                </button>
+            </div>
         </div>
 
         <div class="pdf-viewer-footer">Obed Torres & Sofia Vasquez · 01 · 08 · 2026</div>
@@ -424,6 +465,16 @@
         let renderedPages = {};
         let isRendering = false;
         let touchStartX = 0;
+        let zoomLevel = 1;
+        const ZOOM_MIN = 0.5;
+        const ZOOM_MAX = 4;
+        const ZOOM_STEP = 0.5;
+        let pinchStartDist = 0;
+        let pinchStartZoom = 1;
+        let lastTapTime = 0;
+        let panX = 0, panY = 0;
+        let panStartX = 0, panStartY = 0;
+        let isPanning = false;
 
         // PRELOADER
         window.addEventListener('load', () => {
@@ -502,17 +553,17 @@
             if (isRendering || !pdfDoc) return;
             isRendering = true;
 
-            const body = document.getElementById('viewerBody');
+            const wrapper = document.getElementById('zoomWrapper');
             const loading = document.getElementById('pageLoading');
 
             if (loading) loading.style.display = '';
-            body.querySelectorAll('canvas').forEach(c => c.remove());
+            wrapper.querySelectorAll('canvas').forEach(c => c.remove());
 
             try {
                 const page = await pdfDoc.getPage(currentPage);
                 const baseViewport = page.getViewport({ scale: 1 });
-                const availW = body.clientWidth - 24;
-                const availH = body.clientHeight - 24;
+                const availW = wrapper.clientWidth - 16;
+                const availH = wrapper.clientHeight - 16;
                 const scaleW = availW / baseViewport.width;
                 const scaleH = availH / baseViewport.height;
                 const dpr = Math.min(window.devicePixelRatio || 1, 3);
@@ -526,7 +577,7 @@
                 canvas.style.maxHeight = '100%';
 
                 if (loading) loading.style.display = 'none';
-                body.appendChild(canvas);
+                wrapper.appendChild(canvas);
 
                 const ctx = canvas.getContext('2d');
                 ctx.imageSmoothingEnabled = true;
@@ -548,23 +599,112 @@
         function goToPage(n) {
             if (n < 1 || n > totalPages || n === currentPage) return;
             currentPage = n;
+            resetZoom();
             renderCurrentPage();
         }
 
         function nextPage() { goToPage(currentPage + 1); }
         function prevPage() { goToPage(currentPage - 1); }
 
-        // SWIPE GESTURE
+        // ZOOM
+        function setZoom(level) {
+            zoomLevel = Math.max(ZOOM_MIN, Math.min(ZOOM_MAX, level));
+            const canvas = document.querySelector('.pdf-zoom-wrapper canvas');
+            if (canvas) {
+                canvas.style.transform = 'scale(' + zoomLevel + ') translate(' + (panX / zoomLevel) + 'px, ' + (panY / zoomLevel) + 'px)';
+            }
+            document.getElementById('zoomLabel').textContent = Math.round(zoomLevel * 100) + '%';
+        }
+
+        function zoomIn() { setZoom(zoomLevel + ZOOM_STEP); }
+        function zoomOut() { setZoom(zoomLevel - ZOOM_STEP); }
+
+        function resetZoom() {
+            zoomLevel = 1;
+            panX = 0;
+            panY = 0;
+            const canvas = document.querySelector('.pdf-zoom-wrapper canvas');
+            if (canvas) canvas.style.transform = '';
+            document.getElementById('zoomLabel').textContent = '100%';
+        }
+
+        // TOUCH GESTURES
         const viewerBody = document.getElementById('viewerBody');
+
         viewerBody.addEventListener('touchstart', (e) => {
-            touchStartX = e.touches[0].clientX;
-        }, { passive: true });
+            const touches = e.touches;
+
+            if (touches.length === 1) {
+                touchStartX = touches[0].clientX;
+                touchStartY = touches[0].clientY;
+                panStartX = panX;
+                panStartY = panY;
+                isPanning = zoomLevel > 1;
+
+                // Double tap detection
+                const now = Date.now();
+                if (now - lastTapTime < 300) {
+                    e.preventDefault();
+                    if (zoomLevel > 1) {
+                        resetZoom();
+                    } else {
+                        setZoom(2.5);
+                    }
+                    lastTapTime = 0;
+                    return;
+                }
+                lastTapTime = now;
+            }
+
+            if (touches.length === 2) {
+                e.preventDefault();
+                isPanning = false;
+                pinchStartDist = Math.hypot(
+                    touches[0].clientX - touches[1].clientX,
+                    touches[0].clientY - touches[1].clientY
+                );
+                pinchStartZoom = zoomLevel;
+            }
+        }, { passive: false });
+
+        viewerBody.addEventListener('touchmove', (e) => {
+            const touches = e.touches;
+
+            if (touches.length === 2 && pinchStartDist > 0) {
+                e.preventDefault();
+                const dist = Math.hypot(
+                    touches[0].clientX - touches[1].clientX,
+                    touches[0].clientY - touches[1].clientY
+                );
+                const scale = dist / pinchStartDist;
+                setZoom(pinchStartZoom * scale);
+                return;
+            }
+
+            if (touches.length === 1 && isPanning && zoomLevel > 1) {
+                e.preventDefault();
+                const dx = touches[0].clientX - touchStartX;
+                const dy = touches[0].clientY - touchStartY;
+                panX = panStartX + dx;
+                panY = panStartY + dy;
+                const canvas = document.querySelector('.pdf-zoom-wrapper canvas');
+                if (canvas) canvas.style.transform = 'scale(' + zoomLevel + ') translate(' + (panX / zoomLevel) + 'px, ' + (panY / zoomLevel) + 'px)';
+            }
+        }, { passive: false });
 
         viewerBody.addEventListener('touchend', (e) => {
-            const diff = touchStartX - e.changedTouches[0].clientX;
-            if (Math.abs(diff) > 50) {
-                if (diff > 0) nextPage();
-                else prevPage();
+            if (e.touches.length === 0) {
+                // Swipe detection (only when not zoomed)
+                if (zoomLevel <= 1) {
+                    const diff = touchStartX - e.changedTouches[0].clientX;
+                    const diffY = Math.abs(touchStartY - e.changedTouches[0].clientY);
+                    if (Math.abs(diff) > 50 && diffY < 80) {
+                        if (diff > 0) nextPage();
+                        else prevPage();
+                    }
+                }
+                pinchStartDist = 0;
+                isPanning = false;
             }
         }, { passive: true });
 
@@ -574,6 +714,9 @@
             if (e.key === 'ArrowRight' || e.key === 'ArrowDown') nextPage();
             if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') prevPage();
             if (e.key === 'Escape') closePdfViewer();
+            if (e.key === '+' || e.key === '=') zoomIn();
+            if (e.key === '-') zoomOut();
+            if (e.key === '0') resetZoom();
         });
     </script>
 
