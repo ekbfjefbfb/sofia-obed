@@ -489,223 +489,6 @@
         }
 
         /* ========================================
-           PDF OVERLAY — PREMIUM MOBILE
-        ======================================== */
-        .pdf-overlay {
-            position: fixed;
-            inset: 0;
-            background: rgba(26, 23, 20, 0.96);
-            backdrop-filter: blur(40px);
-            -webkit-backdrop-filter: blur(40px);
-            z-index: 9000;
-            display: flex;
-            flex-direction: column;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.5s var(--ease-luxury);
-        }
-
-        .pdf-overlay.active {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        .pdf-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 1rem 1.2rem;
-            padding-top: calc(1rem + env(safe-area-inset-top, 0px));
-            background: rgba(255, 255, 255, 0.04);
-            border-bottom: 1px solid rgba(198, 166, 100, 0.12);
-            flex-shrink: 0;
-            min-height: 56px;
-        }
-
-        .pdf-header-left {
-            display: flex;
-            flex-direction: column;
-            gap: 0.15rem;
-        }
-
-        .pdf-header-label {
-            font-family: 'Montserrat', sans-serif;
-            font-size: 0.5rem;
-            font-weight: 300;
-            letter-spacing: 0.2em;
-            text-transform: uppercase;
-            color: var(--text-muted);
-        }
-
-        .pdf-header-title {
-            font-family: 'Playfair Display', serif;
-            font-size: 0.95rem;
-            font-weight: 400;
-            color: var(--gold-light);
-        }
-
-        .pdf-close-btn {
-            width: 40px;
-            height: 40px;
-            border: 1px solid rgba(198, 166, 100, 0.25);
-            background: rgba(198, 166, 100, 0.08);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            flex-shrink: 0;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        .pdf-close-btn:hover {
-            background: rgba(198, 166, 100, 0.2);
-            border-color: var(--gold);
-            transform: rotate(90deg);
-        }
-
-        .pdf-close-btn svg {
-            width: 16px;
-            height: 16px;
-            stroke: var(--gold-light);
-            fill: none;
-            stroke-width: 1.5;
-        }
-
-        .pdf-body {
-            flex: 1;
-            position: relative;
-            overflow: hidden;
-            padding: 0;
-        }
-
-        .pdf-body iframe {
-            position: absolute;
-            inset: 0;
-            width: 100%;
-            height: 100%;
-            border: none;
-            background: white;
-        }
-            width: 100%;
-            height: 100%;
-            border: none;
-            background: var(--white);
-        }
-
-        /* Loading */
-        .pdf-loading {
-            position: absolute;
-            inset: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 1.5rem;
-            background: rgba(26, 23, 20, 0.3);
-        }
-
-        .pdf-loading-ring {
-            width: 48px;
-            height: 48px;
-            position: relative;
-        }
-
-        .pdf-loading-ring::before {
-            content: '';
-            position: absolute;
-            inset: -6px;
-            border: 1px solid rgba(198, 166, 100, 0.15);
-            border-radius: 50%;
-        }
-
-        .pdf-loading-spin {
-            width: 100%;
-            height: 100%;
-            border: 1.5px solid transparent;
-            border-top-color: var(--gold);
-            border-right-color: var(--gold-soft);
-            border-radius: 50%;
-            animation: pdfSpin 1s linear infinite;
-        }
-
-        @keyframes pdfSpin {
-            to { transform: rotate(360deg); }
-        }
-
-        .pdf-loading-text {
-            font-family: 'Montserrat', sans-serif;
-            font-size: 0.6rem;
-            font-weight: 300;
-            letter-spacing: 0.2em;
-            text-transform: uppercase;
-            color: rgba(255,255,255,0.5);
-        }
-
-        /* Fallback */
-        .pdf-fallback {
-            text-align: center;
-            color: var(--white);
-            padding: 3rem 2rem;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            max-width: 340px;
-            margin: 0 auto;
-        }
-
-        .pdf-fallback-ring {
-            width: 70px;
-            height: 70px;
-            border: 1px solid var(--gold);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 1.5rem;
-            position: relative;
-        }
-
-        .pdf-fallback-ring::before {
-            content: '';
-            position: absolute;
-            inset: -8px;
-            border: 1px solid rgba(198, 166, 100, 0.2);
-            border-radius: 50%;
-        }
-
-        .pdf-fallback-ring svg {
-            width: 26px;
-            height: 26px;
-            stroke: var(--gold);
-            fill: none;
-            stroke-width: 1.5;
-        }
-
-        .pdf-fallback h3 {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.3rem;
-            font-weight: 400;
-            margin-bottom: 0.5rem;
-            color: var(--gold-light);
-        }
-
-        .pdf-fallback p {
-            font-family: 'Montserrat', sans-serif;
-            font-size: 0.7rem;
-            font-weight: 300;
-            color: rgba(255,255,255,0.5);
-            margin-bottom: 2rem;
-            line-height: 1.8;
-        }
-
-        .pdf-fallback .btn-luxury {
-            font-size: 0.6rem;
-        }
-
-        /* ========================================
            ANIMATIONS
         ======================================== */
         @keyframes fadeSlideUp {
@@ -796,10 +579,6 @@
                 --text-light: #5A5248;
                 --white: #1E1B18;
             }
-
-            .pdf-body iframe {
-                background: #1E1B18;
-            }
         }
     </style>
 </head>
@@ -874,14 +653,16 @@
 
             <!-- CTA -->
             <div class="hero-cta">
-                <button class="btn-luxury" onclick="openPdf()">
+                <a href="/pdf" target="_blank" class="btn-luxury">
                     <span>Ver Lista de Mesas</span>
                     <span class="btn-arrow">
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M5 12h14M12 5l7 7-7 7"/>
+                            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+                            <polyline points="15 3 21 3 21 9"/>
+                            <line x1="10" y1="14" x2="21" y2="3"/>
                         </svg>
                     </span>
-                </button>
+                </a>
             </div>
 
         </div>
@@ -900,36 +681,9 @@
     </footer>
 
     <!-- ==========================================
-         PDF OVERLAY
-    ========================================== -->
-    <div class="pdf-overlay" id="pdfOverlay">
-        <div class="pdf-header">
-            <div class="pdf-header-left">
-                <span class="pdf-header-label">Obed Torres & Sofia Vasquez</span>
-                <span class="pdf-header-title">Lista de Mesas</span>
-            </div>
-            <button class="pdf-close-btn" onclick="closePdf()" aria-label="Cerrar">
-                <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M18 6L6 18M6 6l12 12"/>
-                </svg>
-            </button>
-        </div>
-        <div class="pdf-body" id="pdfBody">
-            <iframe id="pdfIframe" src="" title="Lista de Mesas" style="width:100%;height:100%;border:none;background:white;display:none;"></iframe>
-            <div class="pdf-loading" id="pdfLoading">
-                <div class="pdf-loading-ring"><div class="pdf-loading-spin"></div></div>
-                <p class="pdf-loading-text">Cargando lista de mesas...</p>
-            </div>
-        </div>
-    </div>
-
-    <!-- ==========================================
          SCRIPT
     ========================================== -->
     <script>
-        // PDF integrado directo en el servidor
-        const PDF_URL = '/pdf';
-
         // PRELOADER
         window.addEventListener('load', () => {
             setTimeout(() => {
@@ -949,48 +703,6 @@
                 container.appendChild(p);
             }
         })();
-
-        let pdfOverlayActive = false;
-
-        function openPdf() {
-            if (pdfOverlayActive) return;
-            pdfOverlayActive = true;
-
-            const overlay = document.getElementById('pdfOverlay');
-            const iframe = document.getElementById('pdfIframe');
-            const loading = document.getElementById('pdfLoading');
-
-            overlay.classList.add('active');
-            document.body.style.overflow = 'hidden';
-
-            loading.style.display = 'flex';
-            iframe.style.display = 'none';
-
-            iframe.onload = function() {
-                loading.style.display = 'none';
-                iframe.style.display = 'block';
-            };
-
-            iframe.src = PDF_URL;
-        }
-
-        function closePdf() {
-            const overlay = document.getElementById('pdfOverlay');
-            const iframe = document.getElementById('pdfIframe');
-            const loading = document.getElementById('pdfLoading');
-
-            overlay.classList.remove('active');
-            document.body.style.overflow = '';
-            pdfOverlayActive = false;
-
-            setTimeout(() => {
-                iframe.src = '';
-                iframe.style.display = 'none';
-                loading.style.display = 'flex';
-            }, 500);
-        }
-
-        document.addEventListener('keydown', e => { if (e.key === 'Escape') closePdf(); });
     </script>
 
 </body>
