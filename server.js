@@ -14,7 +14,7 @@ app.use(express.static(path.join(__dirname), {
 }));
 
 app.get('/pdf', (req, res) => {
-    const pdfPath = path.join(__dirname, 'lista-mesas.pdf');
+    const pdfPath = path.join(__dirname, 'Encuentra tu mesa.pdf');
     if (fs.existsSync(pdfPath)) {
         res.setHeader('Content-Type', 'application/pdf');
         res.setHeader('Content-Disposition', 'inline');
