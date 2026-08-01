@@ -11,42 +11,16 @@
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Italiana&family=Montserrat:wght@200;300;400;500&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap" rel="stylesheet">
     <style>
         *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-
         :root {
-            --gold: #C6A664;
-            --gold-soft: #D4BC8B;
-            --gold-light: #E8D5A3;
-            --gold-pale: #F0E6CC;
-            --gold-dark: #9A7B3C;
-            --cream: #FDF9F5;
-            --blush: #FAF3EE;
-            --blush-soft: #F7ECE4;
-            --text-primary: #1A1714;
-            --text-secondary: #4A4540;
-            --text-muted: #8A837C;
-            --text-light: #B5AEA6;
-            --white: #FFFFFF;
+            --gold: #C6A664; --gold-soft: #D4BC8B; --gold-light: #E8D5A3; --gold-pale: #F0E6CC; --gold-dark: #9A7B3C;
+            --cream: #FDF9F5; --blush: #FAF3EE; --blush-soft: #F7ECE4;
+            --text-primary: #1A1714; --text-secondary: #4A4540; --text-muted: #8A837C; --text-light: #B5AEA6; --white: #FFFFFF;
             --ease-luxury: cubic-bezier(0.23, 1, 0.32, 1);
-            --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
         }
-
         html, body { height: 100%; overflow: hidden; }
-        body {
-            font-family: 'Cormorant Garamond', serif;
-            background: var(--cream);
-            color: var(--text-primary);
-            -webkit-font-smoothing: antialiased;
-            overscroll-behavior: none;
-        }
+        body { font-family: 'Cormorant Garamond', serif; background: var(--cream); color: var(--text-primary); -webkit-font-smoothing: antialiased; overscroll-behavior: none; }
 
-        /* PRELOADER */
-        .preloader {
-            position: fixed; inset: 0;
-            background: var(--cream);
-            display: flex; align-items: center; justify-content: center;
-            z-index: 10000;
-            transition: opacity 1s var(--ease-luxury), visibility 1s var(--ease-luxury);
-        }
+        .preloader { position: fixed; inset: 0; background: var(--cream); display: flex; align-items: center; justify-content: center; z-index: 10000; transition: opacity 1s var(--ease-luxury), visibility 1s var(--ease-luxury); }
         .preloader.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
         .preloader-inner { text-align: center; }
         .preloader-ornament { display: flex; align-items: center; justify-content: center; gap: 1rem; margin-bottom: 1.5rem; }
@@ -58,66 +32,32 @@
         @keyframes lineShimmer { 0%, 100% { opacity: 0.3; width: 30px; } 50% { opacity: 1; width: 50px; } }
         @keyframes diamondPulse { 0%, 100% { opacity: 0.3; transform: rotate(45deg) scale(0.8); } 50% { opacity: 1; transform: rotate(45deg) scale(1.1); } }
 
-        /* PARTICLES */
         .particles { position: fixed; inset: 0; pointer-events: none; z-index: 1; overflow: hidden; }
         .particle { position: absolute; top: -30px; border-radius: 50% 0 50% 0; opacity: 0; animation: particleFall linear infinite; }
         @keyframes particleFall { 0% { transform: translateY(-10vh) rotate(0deg); opacity: 0; } 8% { opacity: 0.4; } 85% { opacity: 0.2; } 100% { transform: translateY(108vh) rotate(540deg) translateX(60px); opacity: 0; } }
 
-        /* HERO */
-        .hero {
-            height: 100vh; height: 100dvh;
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            text-align: center; padding: 2.5rem 1.5rem;
-            position: relative; overflow: hidden;
-            background: linear-gradient(175deg, var(--cream) 0%, var(--blush) 40%, var(--cream) 100%);
-        }
-        .hero::before {
-            content: ''; position: absolute; inset: 0;
-            background: radial-gradient(ellipse at 20% 10%, rgba(198,166,100,0.05) 0%, transparent 50%),
-                        radial-gradient(ellipse at 80% 90%, rgba(232,213,204,0.25) 0%, transparent 50%);
-            pointer-events: none;
-        }
-        .hero::after {
-            content: ''; position: absolute; top: 0; left: 50%; transform: translateX(-50%);
-            width: 1px; height: 80px;
-            background: linear-gradient(to bottom, transparent, var(--gold-soft), transparent);
-            opacity: 0; animation: heroLineReveal 1.2s ease 0.3s forwards;
-        }
+        .hero { height: 100vh; height: 100dvh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 2.5rem 1.5rem; position: relative; overflow: hidden; background: linear-gradient(175deg, var(--cream) 0%, var(--blush) 40%, var(--cream) 100%); }
+        .hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 20% 10%, rgba(198,166,100,0.05) 0%, transparent 50%), radial-gradient(ellipse at 80% 90%, rgba(232,213,204,0.25) 0%, transparent 50%); pointer-events: none; }
+        .hero::after { content: ''; position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 1px; height: 80px; background: linear-gradient(to bottom, transparent, var(--gold-soft), transparent); opacity: 0; animation: heroLineReveal 1.2s ease 0.3s forwards; }
         @keyframes heroLineReveal { from { opacity: 0; height: 0; } to { opacity: 0.6; height: 80px; } }
-
         .hero-content { position: relative; z-index: 2; max-width: 420px; width: 100%; }
-
         .hero-ornament { margin-bottom: 2.5rem; opacity: 0; animation: fadeScaleIn 1.2s var(--ease-luxury) 0.5s forwards; }
         .hero-ornament svg { width: 50px; height: 50px; }
         @keyframes fadeScaleIn { from { opacity: 0; transform: scale(0.7); } to { opacity: 1; transform: scale(1); } }
-
         .hero-label { font-family: 'Montserrat', sans-serif; font-size: 0.6rem; font-weight: 300; letter-spacing: 0.5em; text-transform: uppercase; color: var(--gold); margin-bottom: 2rem; opacity: 0; animation: fadeSlideUp 1s var(--ease-luxury) 0.7s forwards; }
-
         .hero-names { margin-bottom: 1rem; opacity: 0; animation: fadeSlideUp 1.2s var(--ease-luxury) 0.9s forwards; }
         .hero-name { font-family: 'Playfair Display', serif; font-size: 3.2rem; font-weight: 400; color: var(--text-primary); line-height: 1.15; display: block; }
         .hero-ampersand { font-family: 'Italiana', serif; font-size: 2.2rem; color: var(--gold); display: block; margin: 0.4rem 0; line-height: 1; }
-
         .hero-date-wrap { margin-top: 2rem; opacity: 0; animation: fadeSlideUp 1s var(--ease-luxury) 1.1s forwards; }
         .hero-date-line { display: flex; align-items: center; justify-content: center; gap: 1rem; margin-bottom: 1rem; }
         .hero-date-line .dl { width: 30px; height: 1px; background: var(--gold-soft); }
         .hero-date-line .dd { width: 4px; height: 4px; background: var(--gold); transform: rotate(45deg); }
         .hero-date { font-family: 'Montserrat', sans-serif; font-size: 0.65rem; font-weight: 300; letter-spacing: 0.3em; text-transform: uppercase; color: var(--text-muted); }
-
         .hero-welcome { margin-top: 2.5rem; opacity: 0; animation: fadeSlideUp 1s var(--ease-luxury) 1.3s forwards; }
         .hero-welcome-text { font-family: 'Cormorant Garamond', serif; font-size: 1.35rem; font-weight: 300; font-style: italic; color: var(--text-secondary); line-height: 1.7; }
         .hero-welcome-text em { font-weight: 500; color: var(--text-primary); font-style: normal; }
-
         .hero-cta { margin-top: 3rem; opacity: 0; animation: fadeSlideUp 1s var(--ease-luxury) 1.5s forwards; }
-
-        .btn-luxury {
-            position: relative; display: inline-flex; align-items: center; gap: 0.8rem;
-            padding: 1.1rem 2.8rem; background: var(--gold); border: none; color: var(--white);
-            font-family: 'Montserrat', sans-serif; font-size: 0.65rem; font-weight: 400;
-            letter-spacing: 0.25em; text-transform: uppercase; text-decoration: none;
-            cursor: pointer; overflow: hidden; transition: all 0.6s var(--ease-luxury);
-            box-shadow: 0 8px 40px rgba(198,166,100,0.15);
-            border-radius: 50px; -webkit-tap-highlight-color: transparent;
-        }
+        .btn-luxury { position: relative; display: inline-flex; align-items: center; gap: 0.8rem; padding: 1.1rem 2.8rem; background: var(--gold); border: none; color: var(--white); font-family: 'Montserrat', sans-serif; font-size: 0.65rem; font-weight: 400; letter-spacing: 0.25em; text-transform: uppercase; text-decoration: none; cursor: pointer; overflow: hidden; transition: all 0.6s var(--ease-luxury); box-shadow: 0 8px 40px rgba(198,166,100,0.15); border-radius: 50px; -webkit-tap-highlight-color: transparent; }
         .btn-luxury::before { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, transparent 50%, rgba(0,0,0,0.05) 100%); pointer-events: none; }
         .btn-luxury::after { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent); transition: left 0.7s ease; }
         .btn-luxury:hover::after { left: 100%; }
@@ -125,232 +65,49 @@
         .btn-luxury:active { transform: translateY(0) scale(0.98); transition-duration: 0.1s; }
         .btn-luxury .btn-arrow { display: flex; transition: transform 0.4s var(--ease-luxury); }
         .btn-luxury:hover .btn-arrow { transform: translateX(4px); }
-
         @keyframes fadeSlideUp { from { opacity: 0; transform: translateY(25px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* ============================================
-           PDF VIEWER - FULLSCREEN
-        ============================================ */
-        .pdf-viewer {
-            position: fixed; inset: 0;
-            background: var(--cream);
-            z-index: 9000;
-            display: flex; flex-direction: column;
-            opacity: 0; visibility: hidden;
-            transform: scale(1.02);
-            transition: opacity 0.5s var(--ease-luxury), visibility 0.5s, transform 0.5s var(--ease-luxury);
-        }
-        .pdf-viewer.active { opacity: 1; visibility: visible; transform: scale(1); }
+        /* PDF VIEWER */
+        .pdf-viewer { position: fixed; inset: 0; background: var(--cream); z-index: 9000; display: flex; flex-direction: column; opacity: 0; visibility: hidden; transform: translateY(20px); transition: opacity 0.4s var(--ease-luxury), visibility 0.4s, transform 0.4s var(--ease-luxury); }
+        .pdf-viewer.active { opacity: 1; visibility: visible; transform: translateY(0); }
 
-        .pdf-viewer-header {
-            flex-shrink: 0;
-            padding: 0.8rem 1rem 0.6rem;
-            display: flex; align-items: center; justify-content: space-between;
-            background: var(--cream);
-            border-bottom: 1px solid rgba(198,166,100,0.08);
-            padding-top: calc(0.8rem + env(safe-area-inset-top, 0px));
-            opacity: 0; transform: translateY(-10px);
-            transition: opacity 0.4s var(--ease-luxury) 0.2s, transform 0.4s var(--ease-luxury) 0.2s;
-        }
-        .pdf-viewer.active .pdf-viewer-header { opacity: 1; transform: translateY(0); }
-
-        .pdf-viewer-close {
-            width: 34px; height: 34px;
-            border: none; background: none;
-            display: flex; align-items: center; justify-content: center;
-            cursor: pointer; color: var(--text-muted);
-            transition: color 0.3s;
-            -webkit-tap-highlight-color: transparent;
-        }
+        .pdf-viewer-header { flex-shrink: 0; padding: 0.8rem 1rem 0.6rem; display: flex; align-items: center; justify-content: space-between; background: var(--cream); border-bottom: 1px solid rgba(198,166,100,0.08); padding-top: calc(0.8rem + env(safe-area-inset-top, 0px)); }
+        .pdf-viewer-close { width: 34px; height: 34px; border: none; background: none; display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--text-muted); transition: color 0.3s; -webkit-tap-highlight-color: transparent; }
         .pdf-viewer-close:hover { color: var(--gold); }
         .pdf-viewer-close svg { width: 18px; height: 18px; }
+        .pdf-viewer-title { font-family: 'Playfair Display', serif; font-size: 0.95rem; font-weight: 400; color: var(--text-primary); }
+        .pdf-viewer-page-indicator { font-family: 'Montserrat', sans-serif; font-size: 0.55rem; font-weight: 300; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gold); min-width: 36px; text-align: right; }
 
-        .pdf-viewer-title {
-            font-family: 'Playfair Display', serif;
-            font-size: 0.95rem;
-            font-weight: 400;
-            color: var(--text-primary);
-            text-align: center;
-        }
+        .pdf-viewer-body { flex: 1; position: relative; overflow: hidden; touch-action: none; }
+        .pdf-page-container { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; padding: 10px; }
+        .pdf-page-container canvas { display: block; max-width: 100%; max-height: 100%; border-radius: 10px; box-shadow: 0 8px 50px rgba(26,23,20,0.12), 0 2px 12px rgba(26,23,20,0.06); transition: opacity 0.35s var(--ease-luxury), transform 0.35s var(--ease-luxury); touch-action: none; transform-origin: center center; }
+        .pdf-page-container.entering-right { opacity: 0; transform: translateX(50px) scale(0.97); }
+        .pdf-page-container.entering-left { opacity: 0; transform: translateX(-50px) scale(0.97); }
+        .pdf-page-container.visible { opacity: 1; transform: translateX(0) scale(1); }
+        .pdf-page-container.leaving-left { opacity: 0; transform: translateX(-50px) scale(0.97); }
+        .pdf-page-container.leaving-right { opacity: 0; transform: translateX(50px) scale(0.97); }
 
-        .pdf-viewer-page-indicator {
-            font-family: 'Montserrat', sans-serif;
-            font-size: 0.55rem;
-            font-weight: 300;
-            letter-spacing: 0.15em;
-            text-transform: uppercase;
-            color: var(--gold);
-            min-width: 36px;
-            text-align: right;
-        }
-
-        /* VIEWER BODY */
-        .pdf-viewer-body {
-            flex: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-            position: relative;
-            touch-action: none;
-        }
-
-        .pdf-page-stage {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .pdf-page-slot {
-            position: absolute;
-            inset: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 12px;
-            opacity: 0;
-            transform: translateX(60px) scale(0.96);
-            transition: opacity 0.45s var(--ease-luxury), transform 0.45s var(--ease-luxury);
-            pointer-events: none;
-        }
-
-        .pdf-page-slot.active {
-            opacity: 1;
-            transform: translateX(0) scale(1);
-            pointer-events: auto;
-        }
-
-        .pdf-page-slot.exit-left {
-            opacity: 0;
-            transform: translateX(-60px) scale(0.96);
-        }
-
-        .pdf-page-slot.exit-right {
-            opacity: 0;
-            transform: translateX(60px) scale(0.96);
-        }
-
-        .pdf-page-slot.enter-left {
-            transform: translateX(-60px) scale(0.96);
-        }
-
-        .pdf-page-slot canvas {
-            display: block;
-            max-width: 100%;
-            max-height: 100%;
-            border-radius: 10px;
-            box-shadow: 0 8px 50px rgba(26,23,20,0.12), 0 2px 12px rgba(26,23,20,0.06);
-            touch-action: none;
-            transform-origin: center center;
-        }
-
-        .pdf-page-loading {
-            position: absolute;
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            gap: 1rem;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-        .pdf-page-loading.visible { opacity: 1; }
-        .pdf-page-loading .spinner {
-            width: 36px; height: 36px;
-            border: 2px solid var(--gold-pale);
-            border-top-color: var(--gold);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
+        .pdf-page-loading { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1rem; z-index: 5; background: var(--cream); transition: opacity 0.3s ease; }
+        .pdf-page-loading.hidden { opacity: 0; pointer-events: none; }
+        .pdf-page-loading .spinner { width: 36px; height: 36px; border: 2px solid var(--gold-pale); border-top-color: var(--gold); border-radius: 50%; animation: spin 1s linear infinite; }
         @keyframes spin { to { transform: rotate(360deg); } }
-        .pdf-page-loading p {
-            font-family: 'Montserrat', sans-serif;
-            font-size: 0.55rem;
-            font-weight: 300;
-            letter-spacing: 0.2em;
-            text-transform: uppercase;
-            color: var(--text-muted);
-        }
+        .pdf-page-loading p { font-family: 'Montserrat', sans-serif; font-size: 0.55rem; font-weight: 300; letter-spacing: 0.2em; text-transform: uppercase; color: var(--text-muted); }
 
-        /* NAV BAR */
-        .pdf-viewer-nav {
-            flex-shrink: 0;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0.5rem 0.75rem;
-            padding-bottom: calc(0.5rem + env(safe-area-inset-bottom, 0px));
-            background: var(--cream);
-            border-top: 1px solid rgba(198,166,100,0.08);
-            opacity: 0; transform: translateY(10px);
-            transition: opacity 0.4s var(--ease-luxury) 0.3s, transform 0.4s var(--ease-luxury) 0.3s;
-        }
-        .pdf-viewer.active .pdf-viewer-nav { opacity: 1; transform: translateY(0); }
-
+        .pdf-viewer-nav { flex-shrink: 0; display: flex; align-items: center; justify-content: space-between; padding: 0.5rem 0.75rem; padding-bottom: calc(0.5rem + env(safe-area-inset-bottom, 0px)); background: var(--cream); border-top: 1px solid rgba(198,166,100,0.08); }
         .pdf-nav-group { display: flex; align-items: center; gap: 0.4rem; }
-
-        .pdf-nav-btn {
-            width: 38px; height: 38px;
-            border: 1px solid var(--gold-soft);
-            background: transparent;
-            border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            cursor: pointer;
-            color: var(--gold);
-            transition: all 0.25s var(--ease-luxury);
-            -webkit-tap-highlight-color: transparent;
-        }
+        .pdf-nav-btn { width: 38px; height: 38px; border: 1px solid var(--gold-soft); background: transparent; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--gold); transition: all 0.25s var(--ease-luxury); -webkit-tap-highlight-color: transparent; }
         .pdf-nav-btn:hover { background: var(--gold); color: var(--white); border-color: var(--gold); }
         .pdf-nav-btn:active { transform: scale(0.9); }
         .pdf-nav-btn.disabled { opacity: 0.25; pointer-events: none; }
         .pdf-nav-btn svg { width: 15px; height: 15px; }
-
         .pdf-nav-dots { display: flex; gap: 5px; align-items: center; }
-        .pdf-nav-dot {
-            width: 5px; height: 5px;
-            border-radius: 50%;
-            background: var(--gold-pale);
-            transition: all 0.35s var(--ease-luxury);
-            cursor: pointer;
-        }
-        .pdf-nav-dot.active {
-            background: var(--gold);
-            width: 16px;
-            border-radius: 3px;
-        }
+        .pdf-nav-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--gold-pale); transition: all 0.35s var(--ease-luxury); cursor: pointer; }
+        .pdf-nav-dot.active { background: var(--gold); width: 16px; border-radius: 3px; }
+        .pdf-zoom-label { font-family: 'Montserrat', sans-serif; font-size: 0.48rem; font-weight: 300; letter-spacing: 0.1em; color: var(--text-muted); min-width: 32px; text-align: center; }
 
-        .pdf-zoom-label {
-            font-family: 'Montserrat', sans-serif;
-            font-size: 0.48rem;
-            font-weight: 300;
-            letter-spacing: 0.1em;
-            color: var(--text-muted);
-            min-width: 32px;
-            text-align: center;
-        }
+        .pdf-viewer-footer { flex-shrink: 0; text-align: center; padding: 0.25rem 1rem 0.4rem; font-family: 'Montserrat', sans-serif; font-size: 0.42rem; font-weight: 300; letter-spacing: 0.15em; color: var(--text-light); }
 
-        .pdf-viewer-footer {
-            flex-shrink: 0;
-            text-align: center;
-            padding: 0.25rem 1rem 0.4rem;
-            font-family: 'Montserrat', sans-serif;
-            font-size: 0.42rem;
-            font-weight: 300;
-            letter-spacing: 0.15em;
-            color: var(--text-light);
-            opacity: 0;
-            transition: opacity 0.4s var(--ease-luxury) 0.35s;
-        }
-        .pdf-viewer.active .pdf-viewer-footer { opacity: 1; }
-
-        /* FOOTER */
-        .footer {
-            height: 30vh;
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            text-align: center;
-            background: linear-gradient(180deg, var(--cream) 0%, var(--blush) 100%);
-            position: relative;
-        }
+        .footer { height: 30vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; background: linear-gradient(180deg, var(--cream) 0%, var(--blush) 100%); position: relative; }
         .footer::before { content: ''; position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 40px; height: 1px; background: linear-gradient(90deg, transparent, var(--gold-soft), transparent); }
         .footer-mono { font-family: 'Italiana', serif; font-size: 2.2rem; color: var(--gold); letter-spacing: 0.12em; margin-bottom: 1rem; }
         .footer-date { font-family: 'Montserrat', sans-serif; font-size: 0.55rem; font-weight: 300; letter-spacing: 0.3em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.6rem; }
@@ -358,12 +115,7 @@
         .footer-hearts { margin-top: 1.5rem; }
         .footer-hearts svg { width: 14px; height: 14px; fill: var(--gold-soft); opacity: 0.6; }
 
-        /* DARK MODE */
-        @media (prefers-color-scheme: dark) {
-            :root { --cream: #141210; --blush: #1E1B18; --blush-soft: #242019; --text-primary: #F0E8DE; --text-secondary: #C0B8AE; --text-muted: #7A7268; --text-light: #5A5248; --white: #1E1B18; }
-        }
-
-        /* RESPONSIVE */
+        @media (prefers-color-scheme: dark) { :root { --cream: #141210; --blush: #1E1B18; --blush-soft: #242019; --text-primary: #F0E8DE; --text-secondary: #C0B8AE; --text-muted: #7A7268; --text-light: #5A5248; --white: #1E1B18; } }
         @media (max-width: 374px) { .hero-name { font-size: 2.4rem; } .hero-ampersand { font-size: 1.6rem; } .btn-luxury { padding: 0.9rem 1.8rem; font-size: 0.6rem; } }
         @media (min-width: 375px) and (max-width: 479px) { .hero-name { font-size: 2.8rem; } }
         @media (min-width: 480px) { .hero-name { font-size: 3.5rem; } .hero-ampersand { font-size: 2rem; } .hero { padding: 3rem 2.5rem; } }
@@ -373,7 +125,6 @@
 </head>
 <body>
 
-    <!-- PRELOADER -->
     <div class="preloader" id="preloader">
         <div class="preloader-inner">
             <div class="preloader-ornament">
@@ -386,10 +137,8 @@
         </div>
     </div>
 
-    <!-- PARTICLES -->
     <div class="particles" id="particles"></div>
 
-    <!-- HERO -->
     <section class="hero">
         <div class="hero-content">
             <div class="hero-ornament">
@@ -407,32 +156,24 @@
             </div>
             <div class="hero-date-wrap">
                 <div class="hero-date-line">
-                    <span class="dl"></span>
-                    <span class="dd"></span>
-                    <span class="dl"></span>
+                    <span class="dl"></span><span class="dd"></span><span class="dl"></span>
                 </div>
                 <p class="hero-date">01 · Agosto · 2026</p>
             </div>
             <div class="hero-welcome">
-                <p class="hero-welcome-text">
-                    <em>¡Bienvenidos!</em><br>
-                    Busca tu mesa en la boda
-                </p>
+                <p class="hero-welcome-text"><em>¡Bienvenidos!</em><br>Busca tu mesa en la boda</p>
             </div>
             <div class="hero-cta">
                 <button class="btn-luxury" onclick="openPdfViewer()">
-                    <span>Ver Lista de Mesas</span>
+                    <span>Encuentra tu mesa</span>
                     <span class="btn-arrow">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M5 12h14M12 5l7 7-7 7"/>
-                        </svg>
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                     </span>
                 </button>
             </div>
         </div>
     </section>
 
-    <!-- FOOTER -->
     <footer class="footer">
         <div class="footer-mono">O & S</div>
         <p class="footer-date">01 · 08 · 2026</p>
@@ -442,52 +183,41 @@
         </div>
     </footer>
 
-    <!-- PDF VIEWER FULLSCREEN -->
     <div class="pdf-viewer" id="pdfViewer">
         <div class="pdf-viewer-header">
             <button class="pdf-viewer-close" onclick="closePdfViewer()">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M18 6L6 18M6 6l12 12"/>
-                </svg>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
             </button>
             <div class="pdf-viewer-title">Encuentra tu mesa</div>
             <div class="pdf-viewer-page-indicator" id="pageIndicator">1 / 1</div>
         </div>
 
         <div class="pdf-viewer-body" id="viewerBody">
-            <div class="pdf-page-loading visible" id="pageLoading">
+            <div class="pdf-page-loading" id="pageLoading">
                 <div class="spinner"></div>
                 <p>Cargando...</p>
             </div>
-            <div class="pdf-page-stage" id="pageStage"></div>
+            <div class="pdf-page-container" id="pageA"></div>
+            <div class="pdf-page-container" id="pageB"></div>
         </div>
 
         <div class="pdf-viewer-nav">
             <div class="pdf-nav-group">
                 <button class="pdf-nav-btn" id="btnPrev" onclick="prevPage()">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M15 18l-6-6 6-6"/>
-                    </svg>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
                 </button>
                 <div class="pdf-nav-dots" id="navDots"></div>
                 <button class="pdf-nav-btn" id="btnNext" onclick="nextPage()">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M9 18l6-6-6-6"/>
-                    </svg>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
                 </button>
             </div>
             <div class="pdf-nav-group">
                 <button class="pdf-nav-btn" onclick="zoomOut()">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                        <line x1="5" y1="12" x2="19" y2="12"/>
-                    </svg>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/></svg>
                 </button>
                 <span class="pdf-zoom-label" id="zoomLabel">100%</span>
                 <button class="pdf-nav-btn" onclick="zoomIn()">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                        <line x1="12" y1="5" x2="12" y2="19"/>
-                        <line x1="5" y1="12" x2="19" y2="12"/>
-                    </svg>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
                 </button>
             </div>
         </div>
@@ -495,7 +225,6 @@
         <div class="pdf-viewer-footer">Obed Torres & Sofia Vasquez · 01 · 08 · 2026</div>
     </div>
 
-    <!-- PDF.js -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
     <script>
         pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
@@ -503,13 +232,10 @@
         const PDF_URL = '/encuentra-tu-mesa.pdf';
 
         let pdfDoc = null;
-        let currentPage = 1;
+        let currentPage = 0;
         let totalPages = 1;
         let isTransitioning = false;
         let zoomLevel = 1;
-        const ZOOM_MIN = 0.5;
-        const ZOOM_MAX = 4;
-        const ZOOM_STEP = 0.5;
         let pinchStartDist = 0;
         let pinchStartZoom = 1;
         let lastTapTime = 0;
@@ -517,16 +243,14 @@
         let panStartX = 0, panStartY = 0;
         let touchStartX = 0, touchStartY = 0;
         let isPanning = false;
-        let pageCache = {};
 
-        // PRELOADER
-        window.addEventListener('load', () => {
-            setTimeout(() => {
-                document.getElementById('preloader').classList.add('hidden');
-            }, 1500);
-        });
+        const pageA = document.getElementById('pageA');
+        const pageB = document.getElementById('pageB');
+        let activeSlot = pageA;
+        let inactiveSlot = pageB;
 
-        // PARTICLES
+        window.addEventListener('load', () => { setTimeout(() => { document.getElementById('preloader').classList.add('hidden'); }, 1500); });
+
         (function() {
             const c = document.getElementById('particles');
             const n = window.innerWidth < 480 ? 10 : 18;
@@ -539,13 +263,11 @@
             }
         })();
 
-        // OPEN VIEWER
         async function openPdfViewer() {
-            const viewer = document.getElementById('pdfViewer');
-            const loading = document.getElementById('pageLoading');
-            viewer.classList.add('active');
+            document.getElementById('pdfViewer').classList.add('active');
             document.body.style.overflow = 'hidden';
-            loading.classList.add('visible');
+            const loading = document.getElementById('pageLoading');
+            loading.classList.remove('hidden');
 
             if (!pdfDoc) {
                 try {
@@ -553,30 +275,33 @@
                     totalPages = pdfDoc.numPages;
                     currentPage = 1;
                     buildDots();
-                    await renderPage(1, 'none');
+                    await renderAndShow(1, 'none');
                 } catch (err) {
-                    loading.innerHTML =
-                        '<p style="color:var(--text-muted);font-family:Cormorant Garamond,serif;font-style:italic;">No se pudo cargar la lista.</p>';
+                    loading.innerHTML = '<p style="color:var(--text-muted);font-family:Cormorant Garamond,serif;font-style:italic;">No se pudo cargar la lista.</p>';
                     return;
                 }
             } else {
-                const cached = pageCache[currentPage];
-                if (cached) cached.classList.add('active');
+                await renderAndShow(currentPage, 'none');
             }
-            loading.classList.remove('visible');
+            loading.classList.add('hidden');
             updateNav();
         }
 
-        // CLOSE VIEWER
         function closePdfViewer() {
-            const viewer = document.getElementById('pdfViewer');
-            viewer.classList.remove('active');
+            document.getElementById('pdfViewer').classList.remove('active');
             document.body.style.overflow = '';
             resetZoom();
-            Object.values(pageCache).forEach(s => s.classList.remove('active'));
+            clearSlot(pageA);
+            clearSlot(pageB);
+            activeSlot = pageA;
+            inactiveSlot = pageB;
         }
 
-        // BUILD DOTS
+        function clearSlot(slot) {
+            slot.innerHTML = '';
+            slot.className = 'pdf-page-container';
+        }
+
         function buildDots() {
             const dots = document.getElementById('navDots');
             dots.innerHTML = '';
@@ -588,7 +313,6 @@
             }
         }
 
-        // UPDATE NAV
         function updateNav() {
             document.getElementById('pageIndicator').textContent = currentPage + ' / ' + totalPages;
             document.getElementById('btnPrev').classList.toggle('disabled', currentPage <= 1);
@@ -598,160 +322,111 @@
             });
         }
 
-        // RENDER A SPECIFIC PAGE INTO A SLOT
-        async function renderPage(pageNum, direction) {
-            if (!pdfDoc) return;
-            const stage = document.getElementById('pageStage');
+        async function renderAndShow(pageNum, direction) {
+            const targetSlot = inactiveSlot;
+            clearSlot(targetSlot);
 
-            let slot = pageCache[pageNum];
-            if (!slot) {
-                slot = document.createElement('div');
-                slot.className = 'pdf-page-slot enter-' + (direction === 'next' ? 'right' : direction === 'prev' ? 'left' : '');
-                slot.setAttribute('data-page', pageNum);
-                stage.appendChild(slot);
-                pageCache[pageNum] = slot;
-
-                const page = await pdfDoc.getPage(pageNum);
-                const baseVP = page.getViewport({ scale: 1 });
-                const availW = stage.clientWidth - 24;
-                const availH = stage.clientHeight - 24;
-                const dpr = Math.min(window.devicePixelRatio || 1, 3);
-                const scale = Math.min(availW / baseVP.width, availH / baseVP.height) * dpr;
-                const viewport = page.getViewport({ scale: scale });
-
-                const canvas = document.createElement('canvas');
-                canvas.width = viewport.width;
-                canvas.height = viewport.height;
-                canvas.style.maxWidth = '100%';
-                canvas.style.maxHeight = '100%';
-                canvas.setAttribute('data-page-canvas', pageNum);
-
-                slot.appendChild(canvas);
-
-                const ctx = canvas.getContext('2d');
-                ctx.imageSmoothingEnabled = true;
-                ctx.imageSmoothingQuality = 'high';
-                await page.render({ canvasContext: ctx, viewport: viewport }).promise;
+            if (direction !== 'none') {
+                targetSlot.classList.add(direction === 'next' ? 'entering-right' : 'entering-left');
             }
 
-            return slot;
+            const page = await pdfDoc.getPage(pageNum);
+            const baseVP = page.getViewport({ scale: 1 });
+            const availW = document.getElementById('viewerBody').clientWidth - 20;
+            const availH = document.getElementById('viewerBody').clientHeight - 20;
+            const dpr = Math.min(window.devicePixelRatio || 1, 3);
+            const scale = Math.min(availW / baseVP.width, availH / baseVP.height) * dpr;
+            const viewport = page.getViewport({ scale: scale });
+
+            const canvas = document.createElement('canvas');
+            canvas.width = viewport.width;
+            canvas.height = viewport.height;
+            canvas.style.maxWidth = '100%';
+            canvas.style.maxHeight = '100%';
+
+            targetSlot.appendChild(canvas);
+
+            const ctx = canvas.getContext('2d');
+            ctx.imageSmoothingEnabled = true;
+            ctx.imageSmoothingQuality = 'high';
+            await page.render({ canvasContext: ctx, viewport: viewport }).promise;
+
+            if (direction !== 'none') {
+                activeSlot.classList.remove('visible');
+                activeSlot.classList.add(direction === 'next' ? 'leaving-left' : 'leaving-right');
+            }
+
+            targetSlot.classList.remove('entering-left', 'entering-right');
+            targetSlot.classList.add('visible');
+
+            await new Promise(r => setTimeout(r, 380));
+
+            if (direction !== 'none') {
+                clearSlot(activeSlot);
+                activeSlot.classList.remove('leaving-left', 'leaving-right');
+            }
+
+            const temp = activeSlot;
+            activeSlot = targetSlot;
+            inactiveSlot = temp;
+
+            currentPage = pageNum;
+            updateNav();
         }
 
-        // TRANSITION TO PAGE
         async function transitionToPage(newPage, direction) {
             if (isTransitioning || newPage === currentPage || newPage < 1 || newPage > totalPages) return;
             isTransitioning = true;
             resetZoom();
-
-            const oldSlot = pageCache[currentPage];
-            const newSlot = await renderPage(newPage, direction);
-
-            if (oldSlot) {
-                oldSlot.classList.remove('active');
-                oldSlot.classList.add(direction === 'next' ? 'exit-left' : 'exit-right');
-            }
-
-            newSlot.classList.remove('enter-left', 'enter-right');
-            newSlot.classList.add('active');
-
-            await new Promise(r => setTimeout(r, 460));
-
-            if (oldSlot) {
-                oldSlot.classList.remove('exit-left', 'exit-right');
-            }
-
-            currentPage = newPage;
+            await renderAndShow(newPage, direction);
             isTransitioning = false;
-            updateNav();
         }
 
         function goToPage(n) { transitionToPage(n, n > currentPage ? 'next' : 'prev'); }
         function nextPage() { transitionToPage(currentPage + 1, 'next'); }
         function prevPage() { transitionToPage(currentPage - 1, 'prev'); }
 
-        // ZOOM
         function setZoom(level) {
-            zoomLevel = Math.max(ZOOM_MIN, Math.min(ZOOM_MAX, level));
-            const canvas = document.querySelector('.pdf-page-slot.active canvas');
+            zoomLevel = Math.max(0.5, Math.min(4, level));
+            const canvas = activeSlot.querySelector('canvas');
             if (canvas) {
-                canvas.style.transform = 'scale(' + zoomLevel + ') translate(' + (panX / zoomLevel) + 'px, ' + (panY / zoomLevel) + 'px)';
                 canvas.style.transition = 'transform 0.15s ease';
+                canvas.style.transform = 'scale(' + zoomLevel + ') translate(' + (panX / zoomLevel) + 'px, ' + (panY / zoomLevel) + 'px)';
             }
             document.getElementById('zoomLabel').textContent = Math.round(zoomLevel * 100) + '%';
         }
-
-        function zoomIn() { setZoom(zoomLevel + ZOOM_STEP); }
-        function zoomOut() { setZoom(zoomLevel - ZOOM_STEP); }
-
+        function zoomIn() { setZoom(zoomLevel + 0.5); }
+        function zoomOut() { setZoom(zoomLevel - 0.5); }
         function resetZoom() {
-            zoomLevel = 1;
-            panX = 0;
-            panY = 0;
-            const canvas = document.querySelector('.pdf-page-slot.active canvas');
-            if (canvas) {
-                canvas.style.transform = '';
-                canvas.style.transition = 'transform 0.3s var(--ease-luxury)';
-            }
+            zoomLevel = 1; panX = 0; panY = 0;
+            const canvas = activeSlot.querySelector('canvas');
+            if (canvas) { canvas.style.transition = 'transform 0.3s var(--ease-luxury)'; canvas.style.transform = ''; }
             document.getElementById('zoomLabel').textContent = '100%';
         }
 
-        // TOUCH GESTURES
         const viewerBody = document.getElementById('viewerBody');
-
         viewerBody.addEventListener('touchstart', (e) => {
-            const touches = e.touches;
-
-            if (touches.length === 1) {
-                touchStartX = touches[0].clientX;
-                touchStartY = touches[0].clientY;
-                panStartX = panX;
-                panStartY = panY;
+            const t = e.touches;
+            if (t.length === 1) {
+                touchStartX = t[0].clientX; touchStartY = t[0].clientY;
+                panStartX = panX; panStartY = panY;
                 isPanning = zoomLevel > 1;
-
                 const now = Date.now();
-                if (now - lastTapTime < 300) {
-                    e.preventDefault();
-                    if (zoomLevel > 1) resetZoom();
-                    else setZoom(2.5);
-                    lastTapTime = 0;
-                    return;
-                }
+                if (now - lastTapTime < 300) { e.preventDefault(); if (zoomLevel > 1) resetZoom(); else setZoom(2.5); lastTapTime = 0; return; }
                 lastTapTime = now;
             }
-
-            if (touches.length === 2) {
-                e.preventDefault();
-                isPanning = false;
-                pinchStartDist = Math.hypot(
-                    touches[0].clientX - touches[1].clientX,
-                    touches[0].clientY - touches[1].clientY
-                );
-                pinchStartZoom = zoomLevel;
-            }
+            if (t.length === 2) { e.preventDefault(); isPanning = false; pinchStartDist = Math.hypot(t[0].clientX - t[1].clientX, t[0].clientY - t[1].clientY); pinchStartZoom = zoomLevel; }
         }, { passive: false });
 
         viewerBody.addEventListener('touchmove', (e) => {
-            const touches = e.touches;
-
-            if (touches.length === 2 && pinchStartDist > 0) {
+            const t = e.touches;
+            if (t.length === 2 && pinchStartDist > 0) { e.preventDefault(); setZoom(pinchStartZoom * (Math.hypot(t[0].clientX - t[1].clientX, t[0].clientY - t[1].clientY) / pinchStartDist)); return; }
+            if (t.length === 1 && isPanning && zoomLevel > 1) {
                 e.preventDefault();
-                const dist = Math.hypot(
-                    touches[0].clientX - touches[1].clientX,
-                    touches[0].clientY - touches[1].clientY
-                );
-                setZoom(pinchStartZoom * (dist / pinchStartDist));
-                return;
-            }
-
-            if (touches.length === 1 && isPanning && zoomLevel > 1) {
-                e.preventDefault();
-                panX = panStartX + (touches[0].clientX - touchStartX);
-                panY = panStartY + (touches[0].clientY - touchStartY);
-                const canvas = document.querySelector('.pdf-page-slot.active canvas');
-                if (canvas) {
-                    canvas.style.transition = 'none';
-                    canvas.style.transform = 'scale(' + zoomLevel + ') translate(' + (panX / zoomLevel) + 'px, ' + (panY / zoomLevel) + 'px)';
-                }
+                panX = panStartX + (t[0].clientX - touchStartX);
+                panY = panStartY + (t[0].clientY - touchStartY);
+                const canvas = activeSlot.querySelector('canvas');
+                if (canvas) { canvas.style.transition = 'none'; canvas.style.transform = 'scale(' + zoomLevel + ') translate(' + (panX / zoomLevel) + 'px, ' + (panY / zoomLevel) + 'px)'; }
             }
         }, { passive: false });
 
@@ -760,17 +435,12 @@
                 if (zoomLevel <= 1) {
                     const dx = touchStartX - e.changedTouches[0].clientX;
                     const dy = Math.abs(touchStartY - e.changedTouches[0].clientY);
-                    if (Math.abs(dx) > 50 && dy < 80) {
-                        if (dx > 0) nextPage();
-                        else prevPage();
-                    }
+                    if (Math.abs(dx) > 50 && dy < 80) { if (dx > 0) nextPage(); else prevPage(); }
                 }
-                pinchStartDist = 0;
-                isPanning = false;
+                pinchStartDist = 0; isPanning = false;
             }
         }, { passive: true });
 
-        // KEYBOARD
         document.addEventListener('keydown', (e) => {
             if (!document.getElementById('pdfViewer').classList.contains('active')) return;
             if (e.key === 'ArrowRight' || e.key === 'ArrowDown') nextPage();
@@ -781,6 +451,5 @@
             if (e.key === '0') resetZoom();
         });
     </script>
-
 </body>
 </html>
