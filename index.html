@@ -476,251 +476,6 @@
         }
 
         /* ========================================
-           SECTION — DETAILS
-        ======================================== */
-        .section {
-            padding: 5rem 1.5rem;
-            text-align: center;
-        }
-
-        .section-header {
-            margin-bottom: 3rem;
-        }
-
-        .section-ornament {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.8rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .section-ornament .sol {
-            width: 20px;
-            height: 1px;
-            background: var(--gold-soft);
-        }
-
-        .section-ornament .dia {
-            width: 5px;
-            height: 5px;
-            border: 1px solid var(--gold);
-            transform: rotate(45deg);
-        }
-
-        .section-title {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.8rem;
-            font-weight: 400;
-            color: var(--text-primary);
-            margin-bottom: 0.5rem;
-            letter-spacing: 0.02em;
-        }
-
-        .section-subtitle {
-            font-family: 'Montserrat', sans-serif;
-            font-size: 0.55rem;
-            font-weight: 300;
-            letter-spacing: 0.25em;
-            text-transform: uppercase;
-            color: var(--text-muted);
-        }
-
-        .details-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 1.2rem;
-            max-width: 100%;
-            margin: 0 auto;
-            padding: 0 1.2rem;
-        }
-
-        .detail-card {
-            padding: 2.2rem 1.8rem 2rem;
-            background: linear-gradient(145deg, var(--white) 0%, rgba(253, 249, 245, 0.9) 100%);
-            border: 1px solid rgba(198, 166, 100, 0.12);
-            border-radius: 24px;
-            box-shadow:
-                0 4px 20px rgba(26, 23, 20, 0.03),
-                0 1px 3px rgba(26, 23, 20, 0.02),
-                inset 0 1px 0 rgba(255, 255, 255, 0.8);
-            transition: all 0.6s var(--ease-luxury);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .detail-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 3px;
-            background: linear-gradient(90deg, transparent 10%, var(--gold-pale) 30%, var(--gold) 50%, var(--gold-pale) 70%, transparent 90%);
-            opacity: 0;
-            transition: opacity 0.5s ease;
-            border-radius: 24px 24px 0 0;
-        }
-
-        .detail-card::after {
-            content: '';
-            position: absolute;
-            top: 12px;
-            right: 12px;
-            width: 30px;
-            height: 30px;
-            border: 1px solid rgba(198, 166, 100, 0.08);
-            border-radius: 50%;
-            pointer-events: none;
-        }
-
-        .detail-card:hover::before,
-        .detail-card:active::before {
-            opacity: 1;
-        }
-
-        .detail-card:hover,
-        .detail-card:active {
-            transform: translateY(-4px) scale(1.01);
-            box-shadow:
-                0 20px 50px rgba(26, 23, 20, 0.08),
-                0 8px 20px rgba(198, 166, 100, 0.12),
-                inset 0 1px 0 rgba(255, 255, 255, 0.9);
-            border-color: rgba(198, 166, 100, 0.25);
-        }
-
-        .detail-icon-wrap {
-            width: 60px;
-            height: 60px;
-            margin: 0 auto 1.5rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border: 1.5px solid rgba(198, 166, 100, 0.2);
-            border-radius: 18px;
-            transition: all 0.5s var(--ease-luxury);
-            background: linear-gradient(135deg, rgba(198, 166, 100, 0.04) 0%, rgba(198, 166, 100, 0.01) 100%);
-            position: relative;
-        }
-
-        .detail-icon-wrap::after {
-            content: '';
-            position: absolute;
-            bottom: -8px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 20px;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, var(--gold-soft), transparent);
-            opacity: 0;
-            transition: opacity 0.4s ease;
-        }
-
-        .detail-card:hover .detail-icon-wrap::after {
-            opacity: 1;
-        }
-
-        .detail-card:hover .detail-icon-wrap {
-            border-color: var(--gold);
-            background: linear-gradient(135deg, rgba(198, 166, 100, 0.1) 0%, rgba(198, 166, 100, 0.04) 100%);
-            transform: scale(1.08);
-            box-shadow: 0 4px 15px rgba(198, 166, 100, 0.15);
-        }
-
-        .detail-icon-wrap svg {
-            width: 26px;
-            height: 26px;
-            stroke: var(--gold);
-            fill: none;
-            stroke-width: 1.5;
-            stroke-linecap: round;
-            stroke-linejoin: round;
-        }
-
-        .detail-label {
-            font-family: 'Montserrat', sans-serif;
-            font-size: 0.55rem;
-            font-weight: 500;
-            letter-spacing: 0.3em;
-            text-transform: uppercase;
-            color: var(--gold);
-            margin-bottom: 0.7rem;
-        }
-
-        .detail-value {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.35rem;
-            font-weight: 500;
-            color: var(--text-primary);
-            line-height: 1.3;
-            margin-bottom: 0.2rem;
-        }
-
-        .detail-note {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 1rem;
-            color: var(--text-muted);
-            margin-top: 0.3rem;
-            font-style: italic;
-            line-height: 1.4;
-        }
-
-        /* ========================================
-           CTA SECTION — BOTTOM
-        ======================================== */
-        .cta-section {
-            padding: 4.5rem 1.5rem;
-            text-align: center;
-            background: linear-gradient(180deg, var(--cream) 0%, var(--blush-soft) 50%, var(--cream) 100%);
-            position: relative;
-        }
-
-        .cta-section::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 1px;
-            height: 60px;
-            background: linear-gradient(to bottom, transparent, var(--gold-soft), transparent);
-        }
-
-        .cta-question {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.6rem;
-            font-weight: 400;
-            color: var(--text-primary);
-            margin-bottom: 2rem;
-            margin-top: 1rem;
-            line-height: 1.3;
-        }
-
-        /* ========================================
-           DIVIDER
-        ======================================== */
-        .divider {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.6rem;
-            padding: 0.5rem 0;
-        }
-
-        .divider .d-line {
-            width: 15px;
-            height: 1px;
-            background: var(--gold-soft);
-        }
-
-        .divider .d-dot {
-            width: 3px;
-            height: 3px;
-            background: var(--gold);
-            border-radius: 50%;
-        }
-
-        /* ========================================
            FOOTER
         ======================================== */
         .footer {
@@ -1026,18 +781,12 @@
             .hero-label { font-size: 0.5rem; letter-spacing: 0.35em; }
             .hero-welcome-text { font-size: 1.15rem; }
             .btn-luxury { padding: 0.9rem 1.8rem; font-size: 0.6rem; }
-            .section { padding: 3.5rem 1rem; }
-            .section-title { font-size: 1.5rem; }
-            .detail-card { padding: 1.8rem 1.2rem; }
-            .cta-question { font-size: 1.3rem; }
-            .details-grid { padding: 0 0.8rem; }
         }
 
         /* Standard phones (375px - 479px) */
         @media (min-width: 375px) and (max-width: 479px) {
             .hero-name { font-size: 2.8rem; }
             .hero { padding: 2.5rem 1.5rem; }
-            .details-grid { padding: 0 1rem; }
         }
 
         /* Large phones / small tablets (480px - 767px) */
@@ -1045,26 +794,12 @@
             .hero-name { font-size: 3.5rem; }
             .hero-ampersand { font-size: 2rem; }
             .hero { padding: 3rem 2.5rem; }
-            .details-grid {
-                gap: 1.2rem;
-                padding: 0 1.5rem;
-            }
-            .detail-card { padding: 2.2rem 2rem; }
         }
 
         /* Tablets (768px+) */
         @media (min-width: 768px) {
             .hero-name { font-size: 4.5rem; }
             .hero-ampersand { font-size: 2.5rem; }
-            .section { padding: 6rem 2rem; }
-            .details-grid {
-                grid-template-columns: 1fr 1fr;
-                max-width: 700px;
-                gap: 1.5rem;
-                padding: 0 2rem;
-            }
-            .detail-card { padding: 2.5rem 2rem; }
-            .cta-question { font-size: 1.8rem; }
             .footer { padding: 5rem 2rem 3.5rem; }
         }
 
@@ -1072,7 +807,6 @@
         @media (min-width: 1024px) {
             .hero-name { font-size: 5.5rem; }
             .hero-ampersand { font-size: 3rem; }
-            .details-grid { max-width: 850px; }
         }
 
         /* Safe Area */
@@ -1097,24 +831,6 @@
                 --text-muted: #7A7268;
                 --text-light: #5A5248;
                 --white: #1E1B18;
-            }
-
-            .detail-card {
-                background: linear-gradient(145deg, #1E1B18 0%, #242019 100%);
-                border-color: rgba(198, 166, 100, 0.08);
-                box-shadow:
-                    0 4px 20px rgba(0, 0, 0, 0.2),
-                    0 1px 3px rgba(0, 0, 0, 0.1),
-                    inset 0 1px 0 rgba(255, 255, 255, 0.03);
-            }
-
-            .detail-card:hover,
-            .detail-card:active {
-                border-color: rgba(198, 166, 100, 0.2);
-                box-shadow:
-                    0 20px 50px rgba(0, 0, 0, 0.3),
-                    0 8px 20px rgba(198, 166, 100, 0.08),
-                    inset 0 1px 0 rgba(255, 255, 255, 0.05);
             }
 
             .pdf-body iframe {
