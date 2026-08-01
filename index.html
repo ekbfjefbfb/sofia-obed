@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Obed & Sofia Rendoza — Nuestra Boda</title>
-    <meta name="description" content="Bienvenidos a la boda de Obed y Sofia Rendoza. Encuentra tu mesa aquí.">
+    <title>Obed Torres & Sofia Vasquez — Nuestra Boda</title>
+    <meta name="description" content="Bienvenidos a la boda de Obed Torres y Sofia Vasquez. Encuentra tu mesa aquí.">
     <meta name="theme-color" content="#FDF8F4">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -1111,9 +1111,9 @@
 
             <!-- Names -->
             <div class="hero-names">
-                <span class="hero-name">Obed</span>
+                <span class="hero-name">Obed Torres</span>
                 <span class="hero-ampersand">&</span>
-                <span class="hero-name">Sofia Rendoza</span>
+                <span class="hero-name">Sofia Vasquez</span>
             </div>
 
             <!-- Date -->
@@ -1261,7 +1261,7 @@
     <div class="pdf-overlay" id="pdfOverlay">
         <div class="pdf-header">
             <div class="pdf-header-left">
-                <span class="pdf-header-label">Obed & Sofia Rendoza</span>
+                <span class="pdf-header-label">Obed Torres & Sofia Vasquez</span>
                 <span class="pdf-header-title">Lista de Mesas</span>
             </div>
             <button class="pdf-close-btn" onclick="closePdf()" aria-label="Cerrar">
@@ -1277,24 +1277,8 @@
          SCRIPT
     ========================================== -->
     <script>
-        // ============================================
-        //  CONFIGURACIÓN — PEGA TU URL DEL PDF AQUÍ
-        // ============================================
-        //
-        //  Google Drive:
-        //    1. Sube el PDF → Clic derecho → Compartir → "Cualquier persona con el enlace"
-        //    2. Copia el enlace. Extrae el FILE_ID de:
-        //       https://drive.google.com/file/d/ARCHIVOID_AQUI/preview
-        //    3. Pega el enlace completo abajo (formato /preview)
-        //
-        //  Dropbox:
-        //    1. Sube el PDF → "Compartir" → "Crear enlace"
-        //    2. Cambia "dl=0" por "raw=1" al final del enlace
-        //    3. Pega el enlace abajo
-        //
         // PDF integrado directo en el servidor
         const PDF_URL = '/Encuentra%20tu%20mesa.pdf';
-        // ============================================
 
         // PRELOADER
         window.addEventListener('load', () => {
@@ -1311,87 +1295,63 @@
                 const p = document.createElement('div');
                 p.classList.add('particle');
                 const size = 6 + Math.random() * 10;
-                p.style.cssText = `
-                    left: ${Math.random() * 100}%;
-                    width: ${size}px;
-                    height: ${size}px;
-                    background: ${Math.random() > 0.5 ? 'var(--gold-pale)' : 'var(--rose)'};
-                    opacity: ${0.15 + Math.random() * 0.25};
-                    animation-duration: ${10 + Math.random() * 15}s;
-                    animation-delay: ${Math.random() * 20}s;
-                `;
+                p.style.cssText = 'left:' + (Math.random() * 100) + '%;width:' + size + 'px;height:' + size + 'px;background:' + (Math.random() > 0.5 ? 'var(--gold-pale)' : 'var(--rose)') + ';opacity:' + (0.15 + Math.random() * 0.25) + ';animation-duration:' + (10 + Math.random() * 15) + 's;animation-delay:' + (Math.random() * 20) + 's;';
                 container.appendChild(p);
             }
         })();
 
-        // PDF VIEWER — INLINE DIRECTO
+        let pdfOverlayActive = false;
+
         function openPdf() {
+            if (pdfOverlayActive) return;
+            pdfOverlayActive = true;
+
             const overlay = document.getElementById('pdfOverlay');
             const body = document.getElementById('pdfBody');
+
+            // Show overlay with loading
             overlay.classList.add('active');
             document.body.style.overflow = 'hidden';
 
-            body.innerHTML = `
-                <div class="pdf-loading">
-                    <div class="pdf-loading-ring">
-                        <div class="pdf-loading-spin"></div>
-                    </div>
-                    <p class="pdf-loading-text">Cargando lista de mesas...</p>
-                </div>
-            `;
+            body.innerHTML = '<div class="pdf-loading"><div class="pdf-loading-ring"><div class="pdf-loading-spin"></div></div><p class="pdf-loading-text">Cargando lista de mesas...</p></div>';
 
+            // Create iframe
             const iframe = document.createElement('iframe');
+            iframe.src = PDF_URL;
             iframe.title = 'Lista de Mesas';
-            iframe.style.cssText = 'width:100%;height:100%;border:none;background:white;display:none;';
+            iframe.style.cssText = 'width:100%;height:100%;border:none;background:white;opacity:0;transition:opacity 0.4s ease;';
 
-            iframe.onload = () => {
-                setTimeout(() => {
-                    body.innerHTML = '';
-                    body.appendChild(iframe);
-                    iframe.style.display = 'block';
-                }, 400);
+            iframe.onload = function() {
+                body.innerHTML = '';
+                body.appendChild(iframe);
+                requestAnimationFrame(() => { iframe.style.opacity = '1'; });
             };
 
-            iframe.onerror = () => showPdfFallback(body);
+            iframe.onerror = function() {
+                showPdfFallback(body);
+            };
 
-            iframe.src = PDF_URL;
             body.appendChild(iframe);
 
+            // Fallback timeout
             setTimeout(() => {
-                if (body.querySelector('.pdf-loading')) showPdfFallback(body);
-            }, 6000);
+                if (!body.querySelector('iframe') || body.querySelector('.pdf-loading')) {
+                    showPdfFallback(body);
+                }
+            }, 5000);
         }
 
         function showPdfFallback(body) {
-            body.innerHTML = `
-                <div class="pdf-fallback">
-                    <div class="pdf-fallback-ring">
-                        <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-                            <polyline points="14 2 14 8 20 8"/>
-                            <line x1="16" y1="13" x2="8" y2="13"/>
-                            <line x1="16" y1="17" x2="8" y2="17"/>
-                        </svg>
-                    </div>
-                    <h3>Lista de Mesas</h3>
-                    <p>Toca para abrir la lista</p>
-                    <a href="${PDF_URL}" target="_blank" class="btn-luxury" style="text-decoration:none">
-                        <span>Abrir Lista</span>
-                    </a>
-                    <button class="btn-luxury btn-outline" onclick="closePdf()" style="margin-top:0.8rem">
-                        <span>Cerrar</span>
-                    </button>
-                </div>
-            `;
+            body.innerHTML = '<div class="pdf-fallback"><div class="pdf-fallback-ring"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></div><h3>Lista de Mesas</h3><p>Toca para abrir la lista</p><a href="' + PDF_URL + '" target="_blank" class="btn-luxury" style="text-decoration:none"><span>Abrir Lista</span></a><button class="btn-luxury btn-outline" onclick="closePdf()" style="margin-top:0.8rem"><span>Cerrar</span></button></div>';
         }
 
         function closePdf() {
             const overlay = document.getElementById('pdfOverlay');
+            const body = document.getElementById('pdfBody');
             overlay.classList.remove('active');
             document.body.style.overflow = '';
-            setTimeout(() => {
-                document.getElementById('pdfBody').innerHTML = '';
-            }, 500);
+            pdfOverlayActive = false;
+            setTimeout(() => { body.innerHTML = ''; }, 500);
         }
 
         document.addEventListener('keydown', e => { if (e.key === 'Escape') closePdf(); });
