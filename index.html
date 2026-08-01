@@ -450,7 +450,7 @@
                     <path d="M18 6L6 18M6 6l12 12"/>
                 </svg>
             </button>
-            <div class="pdf-viewer-title">Lista de Mesas</div>
+            <div class="pdf-viewer-title">Encuentra tu mesa</div>
             <div class="pdf-viewer-page-indicator" id="pageIndicator">1 / 1</div>
         </div>
 
@@ -542,8 +542,10 @@
         // OPEN VIEWER
         async function openPdfViewer() {
             const viewer = document.getElementById('pdfViewer');
+            const loading = document.getElementById('pageLoading');
             viewer.classList.add('active');
             document.body.style.overflow = 'hidden';
+            loading.classList.add('visible');
 
             if (!pdfDoc) {
                 try {
@@ -552,12 +554,16 @@
                     currentPage = 1;
                     buildDots();
                     await renderPage(1, 'none');
-                    document.getElementById('pageLoading').classList.remove('visible');
                 } catch (err) {
-                    document.getElementById('pageLoading').innerHTML =
+                    loading.innerHTML =
                         '<p style="color:var(--text-muted);font-family:Cormorant Garamond,serif;font-style:italic;">No se pudo cargar la lista.</p>';
+                    return;
                 }
+            } else {
+                const cached = pageCache[currentPage];
+                if (cached) cached.classList.add('active');
             }
+            loading.classList.remove('visible');
             updateNav();
         }
 
@@ -567,6 +573,7 @@
             viewer.classList.remove('active');
             document.body.style.overflow = '';
             resetZoom();
+            Object.values(pageCache).forEach(s => s.classList.remove('active'));
         }
 
         // BUILD DOTS
@@ -636,7 +643,6 @@
             isTransitioning = true;
             resetZoom();
 
-            const stage = document.getElementById('pageStage');
             const oldSlot = pageCache[currentPage];
             const newSlot = await renderPage(newPage, direction);
 
