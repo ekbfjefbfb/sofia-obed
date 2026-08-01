@@ -1,6 +1,5 @@
 const express = require('express');
 const path = require('path');
-const fs = require('fs');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
@@ -12,17 +11,6 @@ app.use(express.static(path.join(__dirname), {
         }
     }
 }));
-
-app.get('/pdf', (req, res) => {
-    const pdfPath = path.join(__dirname, 'Encuentra tu mesa.pdf');
-    if (fs.existsSync(pdfPath)) {
-        res.setHeader('Content-Type', 'application/pdf');
-        res.setHeader('Content-Disposition', 'inline');
-        fs.createReadStream(pdfPath).pipe(res);
-    } else {
-        res.status(404).send('PDF no encontrado');
-    }
-});
 
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'index.html'));
