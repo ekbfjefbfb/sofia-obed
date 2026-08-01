@@ -817,14 +817,19 @@
 
         .pdf-body {
             flex: 1;
-            display: flex;
-            align-items: stretch;
-            justify-content: center;
-            padding: 0.5rem;
+            position: relative;
             overflow: hidden;
+            padding: 0;
         }
 
         .pdf-body iframe {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+            background: white;
+        }
             width: 100%;
             height: 100%;
             border: none;
@@ -833,12 +838,14 @@
 
         /* Loading */
         .pdf-loading {
+            position: absolute;
+            inset: 0;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            height: 100%;
             gap: 1.5rem;
+            background: rgba(26, 23, 20, 0.3);
         }
 
         .pdf-loading-ring {
@@ -1273,7 +1280,13 @@
                 </svg>
             </button>
         </div>
-        <div class="pdf-body" id="pdfBody"></div>
+        <div class="pdf-body" id="pdfBody">
+            <iframe id="pdfIframe" src="" title="Lista de Mesas" style="width:100%;height:100%;border:none;background:white;display:none;"></iframe>
+            <div class="pdf-loading" id="pdfLoading">
+                <div class="pdf-loading-ring"><div class="pdf-loading-spin"></div></div>
+                <p class="pdf-loading-text">Cargando lista de mesas...</p>
+            </div>
+        </div>
     </div>
 
     <!-- ==========================================
@@ -1310,51 +1323,37 @@
             pdfOverlayActive = true;
 
             const overlay = document.getElementById('pdfOverlay');
-            const body = document.getElementById('pdfBody');
+            const iframe = document.getElementById('pdfIframe');
+            const loading = document.getElementById('pdfLoading');
 
-            // Show overlay with loading
             overlay.classList.add('active');
             document.body.style.overflow = 'hidden';
 
-            body.innerHTML = '<div class="pdf-loading"><div class="pdf-loading-ring"><div class="pdf-loading-spin"></div></div><p class="pdf-loading-text">Cargando lista de mesas...</p></div>';
-
-            // Create iframe
-            const iframe = document.createElement('iframe');
-            iframe.src = PDF_URL;
-            iframe.title = 'Lista de Mesas';
-            iframe.style.cssText = 'width:100%;height:100%;border:none;background:white;opacity:0;transition:opacity 0.4s ease;';
+            loading.style.display = 'flex';
+            iframe.style.display = 'none';
 
             iframe.onload = function() {
-                body.innerHTML = '';
-                body.appendChild(iframe);
-                requestAnimationFrame(() => { iframe.style.opacity = '1'; });
+                loading.style.display = 'none';
+                iframe.style.display = 'block';
             };
 
-            iframe.onerror = function() {
-                showPdfFallback(body);
-            };
-
-            body.appendChild(iframe);
-
-            // Fallback timeout
-            setTimeout(() => {
-                if (!body.querySelector('iframe') || body.querySelector('.pdf-loading')) {
-                    showPdfFallback(body);
-                }
-            }, 5000);
-        }
-
-        function showPdfFallback(body) {
-            body.innerHTML = '<div class="pdf-fallback"><div class="pdf-fallback-ring"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></div><h3>Lista de Mesas</h3><p>Toca para abrir la lista</p><a href="' + PDF_URL + '" target="_blank" class="btn-luxury" style="text-decoration:none"><span>Abrir Lista</span></a><button class="btn-luxury btn-outline" onclick="closePdf()" style="margin-top:0.8rem"><span>Cerrar</span></button></div>';
+            iframe.src = PDF_URL;
         }
 
         function closePdf() {
             const overlay = document.getElementById('pdfOverlay');
-            const body = document.getElementById('pdfBody');
+            const iframe = document.getElementById('pdfIframe');
+            const loading = document.getElementById('pdfLoading');
+
             overlay.classList.remove('active');
             document.body.style.overflow = '';
             pdfOverlayActive = false;
-            setTimeout(() => { body.innerHTML = ''; }, 500);
+
+            setTimeout(() => {
+                iframe.src = '';
+                iframe.style.display = 'none';
+                loading.style.display = 'flex';
+            }, 500);
         }
 
         document.addEventListener('keydown', e => { if (e.key === 'Escape') closePdf(); });
