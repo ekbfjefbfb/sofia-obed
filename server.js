@@ -9,6 +9,10 @@ app.use(express.static(path.join(__dirname), {
         if (filePath.endsWith('.html')) {
             res.setHeader('Cache-Control', 'no-cache');
         }
+        if (filePath.endsWith('.pdf')) {
+            res.setHeader('Content-Type', 'application/pdf');
+            res.setHeader('Content-Disposition', 'inline');
+        }
     }
 }));
 
@@ -23,5 +27,6 @@ app.get('/qr', (req, res) => {
 app.listen(PORT, '0.0.0.0', () => {
     console.log(`\n  Boda Obed & Sofia Rendoza`);
     console.log(`  Página:  http://localhost:${PORT}`);
-    console.log(`  QR:      http://localhost:${PORT}/qr\n`);
+    console.log(`  QR:      http://localhost:${PORT}/qr`);
+    console.log(`  PDF:     http://localhost:${PORT}/Encuentra%20tu%20mesa.pdf\n`);
 });

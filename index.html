@@ -1272,8 +1272,8 @@
         //    2. Cambia "dl=0" por "raw=1" al final del enlace
         //    3. Pega el enlace abajo
         //
-        // Dropbox: raw=1 abre inline sin descargar
-        const PDF_URL = 'https://www.dropbox.com/scl/fi/sn3inygggpxvjrx0efo56/Encuentra-tu-mesa.pdf?rlkey=2t52ldp4uw303hxvvatvrgst9&st=jhzwchi4&dl=0&raw=1';
+        // PDF integrado directo en el servidor
+        const PDF_URL = '/Encuentra%20tu%20mesa.pdf';
         // ============================================
 
         // PRELOADER
@@ -1304,14 +1304,13 @@
             }
         })();
 
-        // PDF VIEWER — FLUJO INLINE SIN DESCARGA
+        // PDF VIEWER — INLINE DIRECTO
         function openPdf() {
             const overlay = document.getElementById('pdfOverlay');
             const body = document.getElementById('pdfBody');
             overlay.classList.add('active');
             document.body.style.overflow = 'hidden';
 
-            // Mostrar loading elegante
             body.innerHTML = `
                 <div class="pdf-loading">
                     <div class="pdf-loading-ring">
@@ -1321,37 +1320,26 @@
                 </div>
             `;
 
-            // Crear iframe oculto para detectar carga
             const iframe = document.createElement('iframe');
-            iframe.style.display = 'none';
             iframe.title = 'Lista de Mesas';
-            iframe.allow = 'autoplay';
+            iframe.style.cssText = 'width:100%;height:100%;border:none;background:white;display:none;';
 
             iframe.onload = () => {
                 setTimeout(() => {
                     body.innerHTML = '';
-                    iframe.style.display = 'block';
-                    iframe.style.width = '100%';
-                    iframe.style.height = '100%';
-                    iframe.style.border = 'none';
-                    iframe.style.background = 'white';
                     body.appendChild(iframe);
-                }, 600);
+                    iframe.style.display = 'block';
+                }, 400);
             };
 
-            iframe.onerror = () => {
-                showPdfFallback(body);
-            };
+            iframe.onerror = () => showPdfFallback(body);
 
             iframe.src = PDF_URL;
             body.appendChild(iframe);
 
-            // Timeout fallback — si en 8s no carga, mostrar fallback
             setTimeout(() => {
-                if (body.querySelector('.pdf-loading')) {
-                    showPdfFallback(body);
-                }
-            }, 8000);
+                if (body.querySelector('.pdf-loading')) showPdfFallback(body);
+            }, 6000);
         }
 
         function showPdfFallback(body) {
@@ -1366,16 +1354,9 @@
                         </svg>
                     </div>
                     <h3>Lista de Mesas</h3>
-                    <p>Toca el botón para abrir la lista en una nueva pestaña</p>
-                    <a href="${PDF_URL}" target="_blank" rel="noopener" class="btn-luxury" style="text-decoration:none">
+                    <p>Toca para abrir la lista</p>
+                    <a href="${PDF_URL}" target="_blank" class="btn-luxury" style="text-decoration:none">
                         <span>Abrir Lista</span>
-                        <span class="btn-arrow">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
-                                <polyline points="15 3 21 3 21 9"/>
-                                <line x1="10" y1="14" x2="21" y2="3"/>
-                            </svg>
-                        </span>
                     </a>
                     <button class="btn-luxury btn-outline" onclick="closePdf()" style="margin-top:0.8rem">
                         <span>Cerrar</span>
@@ -1390,7 +1371,7 @@
             document.body.style.overflow = '';
             setTimeout(() => {
                 document.getElementById('pdfBody').innerHTML = '';
-            }, 600);
+            }, 500);
         }
 
         document.addEventListener('keydown', e => { if (e.key === 'Escape') closePdf(); });
