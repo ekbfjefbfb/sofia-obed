@@ -179,7 +179,7 @@
             align-items: center;
             justify-content: center;
             text-align: center;
-            padding: 3rem 2rem;
+            padding: 2.5rem 1.5rem;
             position: relative;
             overflow: hidden;
         }
@@ -345,7 +345,7 @@
             display: inline-flex;
             align-items: center;
             gap: 0.8rem;
-            padding: 1.05rem 2.5rem;
+            padding: 1.1rem 2.8rem;
             background: var(--gold);
             border: none;
             color: var(--white);
@@ -359,6 +359,8 @@
             overflow: hidden;
             transition: all 0.6s var(--ease-luxury);
             box-shadow: var(--shadow-gold);
+            -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation;
         }
 
         .btn-luxury::before {
@@ -525,16 +527,17 @@
             display: grid;
             grid-template-columns: 1fr;
             gap: 1rem;
-            max-width: 380px;
+            max-width: 400px;
             margin: 0 auto;
+            padding: 0 0.5rem;
         }
 
         .detail-card {
-            padding: 2rem 1.5rem;
-            background: rgba(255, 255, 255, 0.7);
+            padding: 1.8rem 1.5rem;
+            background: var(--white);
             border: 1px solid rgba(198, 166, 100, 0.1);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
+            border-radius: 2px;
+            box-shadow: 0 4px 20px rgba(26, 23, 20, 0.04), 0 1px 3px rgba(26, 23, 20, 0.02);
             transition: all 0.5s var(--ease-luxury);
             position: relative;
             overflow: hidden;
@@ -546,19 +549,21 @@
             top: 0;
             left: 0;
             right: 0;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, var(--gold-soft), transparent);
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--gold), transparent);
             opacity: 0;
             transition: opacity 0.5s ease;
         }
 
-        .detail-card:hover::before {
+        .detail-card:hover::before,
+        .detail-card:active::before {
             opacity: 1;
         }
 
-        .detail-card:hover {
-            transform: translateY(-4px);
-            box-shadow: var(--shadow-lg);
+        .detail-card:hover,
+        .detail-card:active {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(26, 23, 20, 0.08), 0 2px 8px rgba(198, 166, 100, 0.08);
             border-color: rgba(198, 166, 100, 0.2);
         }
 
@@ -719,20 +724,20 @@
         }
 
         /* ========================================
-           PDF OVERLAY — PREMIUM
+           PDF OVERLAY — PREMIUM MOBILE
         ======================================== */
         .pdf-overlay {
             position: fixed;
             inset: 0;
-            background: rgba(26, 23, 20, 0.92);
-            backdrop-filter: blur(30px);
-            -webkit-backdrop-filter: blur(30px);
+            background: rgba(26, 23, 20, 0.96);
+            backdrop-filter: blur(40px);
+            -webkit-backdrop-filter: blur(40px);
             z-index: 9000;
             display: flex;
             flex-direction: column;
             opacity: 0;
             visibility: hidden;
-            transition: all 0.6s var(--ease-luxury);
+            transition: all 0.5s var(--ease-luxury);
         }
 
         .pdf-overlay.active {
@@ -744,11 +749,12 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 1.2rem 1.5rem;
-            padding-top: calc(1.2rem + env(safe-area-inset-top, 0px));
-            background: rgba(255, 255, 255, 0.03);
-            border-bottom: 1px solid rgba(198, 166, 100, 0.15);
+            padding: 1rem 1.2rem;
+            padding-top: calc(1rem + env(safe-area-inset-top, 0px));
+            background: rgba(255, 255, 255, 0.04);
+            border-bottom: 1px solid rgba(198, 166, 100, 0.12);
             flex-shrink: 0;
+            min-height: 56px;
         }
 
         .pdf-header-left {
@@ -956,24 +962,59 @@
         .reveal-delay-4 { transition-delay: 0.4s; }
 
         /* ========================================
-           RESPONSIVE
+           RESPONSIVE — MOBILE FIRST
         ======================================== */
-        @media (min-width: 480px) {
-            .hero-name { font-size: 3.8rem; }
-            .hero { padding: 3rem 2.5rem; }
-            .details-grid { gap: 1.2rem; }
+
+        /* Small phones (320px - 374px) */
+        @media (max-width: 374px) {
+            .hero-name { font-size: 2.4rem; }
+            .hero-ampersand { font-size: 1.6rem; }
+            .hero-label { font-size: 0.5rem; letter-spacing: 0.35em; }
+            .hero-welcome-text { font-size: 1.15rem; }
+            .btn-luxury { padding: 0.9rem 1.8rem; font-size: 0.6rem; }
+            .section { padding: 3.5rem 1.2rem; }
+            .section-title { font-size: 1.5rem; }
+            .detail-card { padding: 1.5rem 1.2rem; }
+            .cta-question { font-size: 1.3rem; }
         }
 
+        /* Standard phones (375px - 479px) */
+        @media (min-width: 375px) and (max-width: 479px) {
+            .hero-name { font-size: 2.8rem; }
+            .hero { padding: 2.5rem 1.5rem; }
+        }
+
+        /* Large phones / small tablets (480px - 767px) */
+        @media (min-width: 480px) {
+            .hero-name { font-size: 3.5rem; }
+            .hero-ampersand { font-size: 2rem; }
+            .hero { padding: 3rem 2.5rem; }
+            .details-grid {
+                gap: 1.2rem;
+                max-width: 440px;
+            }
+            .detail-card { padding: 2rem 1.8rem; }
+        }
+
+        /* Tablets (768px+) */
         @media (min-width: 768px) {
-            .hero-name { font-size: 5rem; }
-            .hero-ampersand { font-size: 2.8rem; }
+            .hero-name { font-size: 4.5rem; }
+            .hero-ampersand { font-size: 2.5rem; }
             .section { padding: 6rem 2rem; }
             .details-grid {
                 grid-template-columns: 1fr 1fr;
-                max-width: 560px;
+                max-width: 600px;
                 gap: 1.5rem;
             }
             .cta-question { font-size: 1.8rem; }
+            .footer { padding: 4rem 2rem 3rem; }
+        }
+
+        /* Desktop (1024px+) */
+        @media (min-width: 1024px) {
+            .hero-name { font-size: 5.5rem; }
+            .hero-ampersand { font-size: 3rem; }
+            .details-grid { max-width: 700px; }
         }
 
         /* Safe Area */
@@ -1073,7 +1114,7 @@
                     <span class="dd"></span>
                     <span class="dl"></span>
                 </div>
-                <p class="hero-date">15 · Septiembre · 2026</p>
+                <p class="hero-date">01 · Agosto · 2026</p>
             </div>
 
             <!-- Welcome -->
@@ -1128,7 +1169,7 @@
                     </svg>
                 </div>
                 <p class="detail-label">Ceremonia</p>
-                <p class="detail-value">4:00 PM</p>
+                <p class="detail-value">6:00 AM</p>
                 <p class="detail-note">Iglesia de San Antonio</p>
             </div>
 
@@ -1140,7 +1181,7 @@
                     </svg>
                 </div>
                 <p class="detail-label">Recepción</p>
-                <p class="detail-value">6:00 PM</p>
+                <p class="detail-value">8:00 AM</p>
                 <p class="detail-note">Salón Jardín Encantado</p>
             </div>
 
@@ -1198,7 +1239,7 @@
     ========================================== -->
     <footer class="footer">
         <div class="footer-mono">O & S</div>
-        <p class="footer-date">15 · 09 · 2026</p>
+        <p class="footer-date">01 · 08 · 2026</p>
         <p class="footer-message">Gracias por celebrar con nosotros</p>
         <div class="footer-hearts">
             <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
